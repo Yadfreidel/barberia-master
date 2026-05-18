@@ -2,7 +2,7 @@ export function procesarCita(evento) {
     evento.preventDefault(); 
 
     // CONFIGURA TU WHATSAPP REAL AQUÍ
-    const TU_TELEFONO = "18090000000"; 
+    const TU_TELEFONO = "8292466177"; 
 
     const nombre = document.getElementById('nombre').value.trim();
     const email = document.getElementById('email').value.trim();
