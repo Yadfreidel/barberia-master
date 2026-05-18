@@ -1,6 +1,7 @@
 import { serviciosBarberia } from '../models/serviceModel.js';
 import { staffBarberia } from '../models/barberModel.js';
 import { procesarCita } from '../controllers/appointmentController.js';
+import { verificarAccesoAdmin, cerrarDashboard, resetearEstadisticas } from '../controllers/adminController.js';
 
 const gridServicios = document.getElementById('grid-dinamico-servicios');
 const gridStaff = document.getElementById('grid-dinamico-staff');
@@ -12,21 +13,24 @@ const contenedorHoras = document.getElementById('contenedor-horas');
 const formulario = document.getElementById('form-reservas');
 const botonesFiltro = document.querySelectorAll('.btn-filtro');
 
-// Horas comerciales de la barbería
+// Elementos del Dashboard
+const logoAdmin = document.getElementById('logo-admin');
+const btnCerrarDash = document.getElementById('btn-cerrar-dashboard');
+const btnResetDatos = document.getElementById('btn-reset-datos');
+
 const HORARIOS_DISPONIBLES = [
     "09:00", "10:00", "11:00", "12:00", "13:00", 
     "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"
 ];
 
 function inicializarPagina() {
-    // Bloquear selección de días anteriores en el calendario
     if(inputFecha) {
         const hoy = new Date().toISOString().split('T')[0];
         inputFecha.min = hoy;
         inputFecha.addEventListener('change', generarPildorasDeTiempo);
     }
 
-    // 1. Renderizar Servicios del Catálogo
+    // 1. Renderizar Servicios
     if(gridServicios) {
         gridServicios.innerHTML = '';
         serviciosBarberia.forEach(servicio => {
@@ -53,7 +57,7 @@ function inicializarPagina() {
         });
     }
 
-    // 2. Renderizar Staff de Barberos
+    // 2. Renderizar Staff
     if(gridStaff) {
         gridStaff.innerHTML = '';
         staffBarberia.forEach(barbero => {
@@ -75,8 +79,8 @@ function inicializarPagina() {
     }
 
     configurarFiltros();
+    configurarAccesosAccesoAdmin();
 
-    // Redirección fluida al hacer clic en el catálogo hacia los barberos
     const botonesElegir = document.querySelectorAll('.btn-card-reserva');
     botonesElegir.forEach(boton => {
         boton.addEventListener('click', (e) => {
@@ -86,10 +90,8 @@ function inicializarPagina() {
     });
 }
 
-// Generador de píldoras horarias con filtro de tiempo real
 function generarPildorasDeTiempo() {
     if(!contenedorHoras || !inputFecha.value) return;
-    
     contenedorHoras.innerHTML = ''; 
     inputHora.value = ''; 
 
@@ -103,10 +105,8 @@ function generarPildorasDeTiempo() {
         const pildora = document.createElement('div');
         pildora.classList.add('pildora-hora');
         pildora.textContent = horaTexto;
-
         const [horaBloque] = horaTexto.split(':').map(Number);
 
-        // Deshabilitar horas que ya pasaron si se elige el día de hoy
         if (fechaSeleccionada === fechaActualStr) {
             if (horaBloque < horaActual || (horaBloque === horaActual && minutosActuales > 0)) {
                 pildora.classList.add('deshabilitada');
@@ -124,7 +124,6 @@ function generarPildorasDeTiempo() {
     });
 }
 
-// Manejo interactivo de selección visual de barberos
 function configurarSeleccionBarberos() {
     const tarjetasBarberos = document.querySelectorAll('.card-barbero');
     tarjetasBarberos.forEach(tarjeta => {
@@ -138,7 +137,6 @@ function configurarSeleccionBarberos() {
     });
 }
 
-// Barra de filtrado interactivo del catálogo
 function configurarFiltros() {
     botonesFiltro.forEach(boton => {
         boton.addEventListener('click', (e) => {
@@ -155,6 +153,39 @@ function configurarFiltros() {
             });
         });
     });
+}
+
+// NUEVA FUNCIÓN: Configurar accesos ocultos para el administrador
+function configurarAccesosAccesoAdmin() {
+    // Acceso 1: Combinación de Teclas (Computadora) -> Ctrl + Shift + A
+    window.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
+            e.preventDefault();
+            verificarAccesoAdmin();
+        }
+    });
+
+    // Acceso 2: Mantener presionado el logo (Celular) -> 3 Segundos
+    let tiempoPresionado;
+    if(logoAdmin) {
+        logoAdmin.addEventListener('touchstart', () => {
+            tiempoPresionado = setTimeout(verificarAccesoAdmin, 3000);
+        });
+        logoAdmin.addEventListener('touchend', () => {
+            clearTimeout(tiempoPresionado);
+        });
+        // Soporte extra para mouse de PC
+        logoAdmin.addEventListener('mousedown', () => {
+            tiempoPresionado = setTimeout(verificarAccesoAdmin, 3000);
+        });
+        logoAdmin.addEventListener('mouseup', () => {
+            clearTimeout(tiempoPresionado);
+        });
+    }
+
+    // Eventos de botones internos del Dashboard
+    if (btnCerrarDash) btnCerrarDash.addEventListener('click', cerrarDashboard);
+    if (btnResetDatos) btnResetDatos.addEventListener('click', resetearEstadisticas);
 }
 
 if (formulario) formulario.addEventListener('submit', procesarCita);

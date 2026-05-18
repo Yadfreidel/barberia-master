@@ -10,7 +10,7 @@
 <body>
 
     <header>
-        <div class="logo">BARBER<span>SHOP</span></div>
+        <div class="logo" id="logo-admin">BARBER<span>SHOP</span></div>
         <nav>
             <ul>
                 <li><a href="#">Inicio</a></li>
@@ -87,6 +87,47 @@
 
         </div>
     </section>
+
+    <div id="dashboard-admin" class="modal-dashboard ocultar-dashboard">
+        <div class="dashboard-contenido">
+            <div class="dashboard-header">
+                <h2><i class="fas fa-chart-line"></i> Panel de Control BarberShop</h2>
+                <button id="btn-cerrar-dashboard" class="btn-cerrar">&times;</button>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-calendar-check"></i></div>
+                    <div class="metric-info">
+                        <h3 id="dash-total-citas">0</h3>
+                        <p>Citas Registradas</p>
+                    </div>
+                </div>
+                <div class="metric-card ganancias">
+                    <div class="metric-icon"><i class="fas fa-dollar-sign"></i></div>
+                    <div class="metric-info">
+                        <h3 id="dash-total-ingresos">$0.00</h3>
+                        <p>Ingresos Estimados</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details-grid">
+                <div class="detail-box">
+                    <h4><i class="fas fa-star"></i> Servicio Estrella</h4>
+                    <p id="dash-servicio-top">Ninguno aún</p>
+                    <span id="dash-servicio-cant" class="badge">0 ventas</span>
+                </div>
+                <div class="detail-box">
+                    <h4><i class="fas fa-user-crown"></i> Barbero Destacado</h4>
+                    <p id="dash-barbero-top">Ninguno aún</p>
+                    <span id="dash-barbero-cant" class="badge">0 citas</span>
+                </div>
+            </div>
+
+            <button id="btn-reset-datos" class="btn-danger"><i class="fas fa-trash-alt"></i> Reiniciar Estadísticas</button>
+        </div>
+    </div>
 
     <script type="module" src="assets/main.js"></script>
 </body>
