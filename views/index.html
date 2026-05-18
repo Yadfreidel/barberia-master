@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbería Master | Estilo Superior</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">BARBER<span>SHOP</span></div>
+        <nav>
+            <ul>
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#catalogo-seccion">Catálogo</a></li>
+                <li><a href="#contacto">Citas</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-bg-live"></div>
+        <div class="hero-content">
+            <h2>MÁS QUE UN CORTE, <br> ES UNA EXPERIENCIA.</h2>
+            <p>Especialistas en barbería clásica y tendencias modernas.</p>
+            <a href="#contacto" class="btn-reserva">RESERVAR EN LÍNEA</a>
+        </div>
+    </section>
+
+    <section id="catalogo-seccion">
+        <h2 class="seccion-titulo">Nuestros Servicios</h2>
+        <p class="seccion-subtitulo">Seleccionados minuciosamente para el caballero exigente</p>
+
+        <div class="filtros-contenedor">
+            <button class="btn-filtro activo" data-categoria="todos">Ver Todo</button>
+            <button class="btn-filtro" data-categoria="cortes"><i class="fas fa-scissors"></i> Cortes</button>
+            <button class="btn-filtro" data-categoria="barba"><i class="fas fa-razor"></i> Barba & SPA</button>
+            <button class="btn-filtro" data-categoria="combos"><i class="fas fa-gem"></i> Combos VIP</button>
+        </div>
+
+        <div id="grid-dinamico-servicios" class="grid-servicios"></div>
+    </section>
+
+    <section id="contacto">
+        <h2 class="seccion-titulo">Agenda tu Cita Elite</h2>
+        <form class="formulario-citas" id="form-reservas">
+            <input type="text" id="nombre" placeholder="Nombre Completo" required>
+            <input type="email" id="email" placeholder="Correo Electrónico" required>
+            <input type="tel" id="telefono" placeholder="Teléfono de Contacto" required>
+            
+            <label for="servicio-select" style="color: #c5a059; font-weight: bold; margin-bottom: -10px; font-size: 0.9rem;">Servicio Solicitado:</label>
+            <select id="servicio-select" required>
+                <option value="" disabled selected>-- Elige un corte del catálogo --</option>
+            </select>
+
+            <div class="fecha-hora">
+                <input type="date" id="fecha" required>
+                <input type="time" id="hora" min="09:00" max="20:00" required>
+            </div>
+
+            <button type="submit" class="btn-reserva">Confirmar Mi Turno</button>
+        </form>
+    </section>
+
+    <script type="module" src="../assets/main.js"></script>
+</body>
+</html>

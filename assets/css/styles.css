@@ -1,0 +1,327 @@
+/* ==========================================
+   VARIABLES Y CONFIGURACIÓN BASE
+   ========================================== */
+:root {
+    --negro-fondo: #0a0a0a;
+    --negro-tarjeta: #141414;
+    --dorado: #c5a059;
+    --dorado-brillante: #e5c07b;
+    --blanco: #ffffff;
+    --gris-texto: #b3b3b3;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--negro-fondo);
+    color: var(--blanco);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* ==========================================
+   ANIMACIONES KEYFRAMES
+   ========================================== */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseDorado {
+    0% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(197, 160, 89, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0); }
+}
+
+@keyframes livePhoto {
+    0% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.06) translate(-0.5%, -0.5%); filter: brightness(1.08); }
+    100% { transform: scale(1); filter: brightness(1); }
+}
+
+/* ==========================================
+   ENCABEZADO / NAVEGACIÓN (ESCRITORIO)
+   ========================================== */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    background: rgba(10, 10, 10, 0.95);
+    border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+.logo { font-size: 26px; font-weight: 900; letter-spacing: 3px; }
+.logo span { color: var(--dorado); }
+nav ul { display: flex; list-style: none; }
+nav ul li { margin-left: 30px; }
+nav ul li a {
+    text-decoration: none; color: var(--blanco); font-weight: 500;
+    letter-spacing: 1px; transition: all 0.3s ease; text-transform: uppercase; font-size: 0.9rem;
+    position: relative;
+}
+nav ul li a::after {
+    content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0;
+    background-color: var(--dorado); transition: width 0.3s ease;
+}
+nav ul li a:hover { color: var(--dorado); }
+nav ul li a:hover::after { width: 100%; }
+
+/* ==========================================
+   SECCIÓN HERO LIVE PHOTO
+   ========================================== */
+.hero {
+    height: 75vh; position: relative; overflow: hidden;
+    display: flex; justify-content: center; align-items: center; text-align: center;
+}
+.hero-bg-live {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.85)), 
+                url('https://images.unsplash.com/photo-1512864084360-7c0c4d0a0845?q=80&w=1600&auto=format&fit=crop') no-repeat center center/cover;
+    z-index: 1; animation: livePhoto 18s infinite ease-in-out;
+}
+.hero-content { position: relative; z-index: 2; padding: 0 20px; animation: fadeInUp 1.2s ease forwards; }
+.hero-content h2 { font-size: 3.5rem; letter-spacing: 4px; margin-bottom: 15px; font-weight: 900; }
+.hero-content p { font-size: 1.2rem; color: var(--gris-texto); margin-bottom: 35px; }
+
+.btn-reserva {
+    display: inline-block; padding: 16px 45px; background-color: var(--dorado); color: #000;
+    border: 2px solid var(--dorado); font-weight: 700; text-transform: uppercase; cursor: pointer;
+    letter-spacing: 2px; text-decoration: none; animation: pulseDorado 2s infinite; 
+    transition: all 0.4s ease;
+}
+.btn-reserva:hover {
+    background-color: transparent; color: var(--dorado); transform: translateY(-4px); animation: none;
+    box-shadow: 0 10px 20px rgba(197, 160, 89, 0.3);
+}
+
+/* ==========================================
+   ESTILOS DE LA BARRA DE FILTRADO INTERACTIVO
+   ========================================== */
+#catalogo-seccion, #contacto {
+    padding: 80px 8%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.seccion-titulo {
+    font-size: 2.5rem; color: var(--dorado); text-transform: uppercase;
+    letter-spacing: 3px; text-align: center; margin-bottom: 10px;
+}
+.seccion-subtitulo {
+    color: var(--gris-texto); font-size: 1.1rem; text-align: center; margin-bottom: 40px;
+}
+
+.filtros-contenedor {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 50px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn-filtro {
+    padding: 12px 25px;
+    background-color: var(--negro-tarjeta);
+    color: var(--blanco);
+    border: 1px solid #222;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-filtro i { color: var(--gris-texto); font-size: 0.9rem; }
+.btn-filtro:hover { border-color: var(--dorado); color: var(--dorado); }
+.btn-filtro.activo { background-color: var(--dorado); color: #000; border-color: var(--dorado); }
+.btn-filtro.activo i { color: #000; }
+
+/* ==========================================
+   GRILLA DINÁMICA Y COMPORTAMIENTO DE TARJETAS
+   ========================================== */
+.grid-servicios {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.card-servicio {
+    background: var(--negro-tarjeta);
+    border-radius: 6px;
+    border: 1px solid #1f1f1f;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 1;
+    transform: scale(1);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.3s ease, transform 0.3s ease;
+}
+
+.card-servicio.ocultar-card {
+    display: none;
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.card-servicio:hover {
+    border-color: var(--dorado); transform: translateY(-8px); box-shadow: 0 12px 30px rgba(197, 160, 89, 0.12);
+}
+.card-imagen-contenedor { width: 100%; height: 200px; overflow: hidden; position: relative; }
+.card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+.card-servicio:hover .card-img { transform: scale(1.1) rotate(0.5deg); }
+
+.card-info {
+    padding: 25px; display: flex; flex-direction: column; flex-grow: 1;
+    justify-content: space-between; align-items: center; text-align: center;
+}
+.card-servicio h3 { font-size: 1.25rem; margin-bottom: 10px; color: var(--blanco); }
+.card-servicio:hover h3 { color: var(--dorado-brillante); }
+.card-servicio p { color: var(--gris-texto); font-size: 0.9rem; margin-bottom: 15px; min-height: 54px; }
+.precio-tag { color: var(--dorado-brillante); font-weight: 700; font-size: 1.3rem; margin-bottom: 15px; }
+
+.btn-card-reserva {
+    padding: 11px 20px; background-color: transparent; color: var(--dorado);
+    border: 1px solid var(--dorado); font-weight: bold; text-transform: uppercase;
+    cursor: pointer; font-size: 0.8rem; letter-spacing: 1px; transition: all 0.3s ease; width: 100%;
+}
+.btn-card-reserva:hover { background-color: var(--dorado); color: #000; }
+
+/* ==========================================
+   FORMULARIO DE CITAS
+   ========================================== */
+.formulario-citas {
+    width: 100%; max-width: 550px; display: flex; flex-direction: column; gap: 25px;
+    background: #111; padding: 40px; border-radius: 8px; border: 1px solid #1f1f1f;
+}
+.formulario-citas input, .formulario-citas select {
+    padding: 16px; background-color: var(--negro-tarjeta); border: 1px solid #222;
+    color: #fff; font-size: 1rem; border-radius: 4px; transition: all 0.3s ease; width: 100%;
+}
+.formulario-citas input:focus, .formulario-citas select:focus {
+    border-color: var(--dorado); outline: none; background-color: #1a1a1a;
+    box-shadow: 0 0 10px rgba(197, 160, 89, 0.2);
+}
+.fecha-hora { display: flex; gap: 15px; }
+.fecha-hora input { flex: 1; }
+
+
+/* ==========================================
+   MÓDULO RESPONSIVE: AJUSTES PARA SMARTPHONES
+   (Android & iPhone)
+   ========================================== */
+@media (max-width: 768px) {
+    /* 1. Ajustes del Menú del Header */
+    header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 20px;
+    }
+    
+    nav ul {
+        width: 100%;
+        justify-content: center;
+        padding: 0;
+    }
+    
+    nav ul li {
+        margin: 0 12px; /* Espaciado balanceado para pulsar con el dedo */
+    }
+
+    nav ul li a {
+        font-size: 0.8rem;
+    }
+
+    /* 2. Optimización del Hero (Tipografías legibles sin desborde) */
+    .hero {
+        height: 65vh; /* Un poco más bajo en móviles para ver que hay contenido abajo */
+    }
+
+    .hero-content h2 {
+        font-size: 2.1rem; /* Reducido para que quepa en cualquier iPhone o Android */
+        letter-spacing: 2px;
+        line-height: 1.3;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+        margin-bottom: 25px;
+    }
+
+    .btn-reserva {
+        padding: 14px 30px;
+        font-size: 0.85rem;
+    }
+
+    /* 3. Secciones y Títulos */
+    #catalogo-seccion, #contacto {
+        padding: 50px 5%; /* Menos márgenes laterales para ganar espacio de lectura */
+    }
+
+    .seccion-titulo {
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+    }
+
+    .seccion-subtitulo {
+        font-size: 0.95rem;
+        margin-bottom: 30px;
+    }
+
+    /* 4. Menú de Filtros (Píldoras touch con scroll o ajuste elástico) */
+    .filtros-contenedor {
+        gap: 10px;
+        margin-bottom: 35px;
+    }
+
+    .btn-filtro {
+        padding: 10px 18px;
+        font-size: 0.75rem;
+    }
+
+    /* 5. Catálogo en una sola columna limpia */
+    .grid-servicios {
+        grid-template-columns: 1fr; /* Fuerza una tarjeta abajo de la otra */
+        gap: 25px;
+    }
+
+    .card-imagen-contenedor {
+        height: 180px; /* Foto ligeramente más baja en teléfonos */
+    }
+
+    .card-info {
+        padding: 20px;
+    }
+
+    .card-servicio p {
+        min-height: auto; /* En teléfonos no hace falta forzar la altura fija */
+        margin-bottom: 15px;
+    }
+
+    /* 6. Formulario Móvil Ultra Ergonómico */
+    .formulario-citas {
+        padding: 25px 20px; /* Reducimos el padding interno del bloque */
+    }
+
+    .fecha-hora {
+        flex-direction: column; /* Apila la fecha arriba de la hora */
+        gap: 20px;
+    }
+}
