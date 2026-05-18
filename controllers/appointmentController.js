@@ -42,10 +42,9 @@ export function procesarCita(evento) {
 
     const urlWhatsApp = `https://wa.me/${TU_TELEFONO}?text=${mensajeWhatsApp}`;
     
-    // Iniciar el tracking en la web primero
-    activarPantallaSeguimiento({ nombre, servicio, barbero, hora, fecha: fechaFormateada });
+    // Iniciar el tracking en la web
+    activarPantallaSeguimiento({ nombre, servicio, barbero, hora, fecha: fechaFormateada, precio: objetoServicio.precio });
 
-    // Abrir WhatsApp con mini retraso para asegurar transiciones estables
     setTimeout(() => {
         window.open(urlWhatsApp, '_blank');
     }, 100);
@@ -81,7 +80,7 @@ function activarPantallaSeguimiento(datos) {
                 <div><i class="fas fa-clock"></i> ${datos.fecha} a las ${datos.hora} hrs</div>
             </div>
 
-            <div class="linea-tiempo">
+            <div class="linea-tiempo" id="linea-tiempo-uber">
                 <div class="barra-progreso-fondo">
                     <div class="barra-progreso-llena" id="barra-progreso"></div>
                 </div>
@@ -102,6 +101,8 @@ function activarPantallaSeguimiento(datos) {
                 </div>
             </div>
 
+            <div id="contenedor-ticket-wallet" style="display: none;"></div>
+
             <button id="btn-regresar-formulario" class="btn-reserva" style="margin-top: 25px; width: 100%; font-size: 0.9rem; padding: 12px; animation: none;">
                 <i class="fas fa-arrow-left"></i> Volver / Nueva Cita
             </button>
@@ -111,11 +112,13 @@ function activarPantallaSeguimiento(datos) {
 
         contenedorTracking.classList.remove('ocultar-tracking');
         document.getElementById('btn-regresar-formulario').addEventListener('click', restaurarFormulario);
-        simularAvanceUber();
+        
+        // Ejecutamos el avance simulado pasándole todos los datos para armar el QR al final
+        simularAvanceUber(datos);
     }, 400);
 }
 
-function simularAvanceUber() {
+function simularAvanceUber(datosCita) {
     const barra = document.getElementById('barra-progreso');
     const paso2 = document.getElementById('paso-2');
     const paso3 = document.getElementById('paso-3');
@@ -125,19 +128,76 @@ function simularAvanceUber() {
             barra.style.height = '50%';
             paso2.classList.add('activo-nodo');
         }
-    }, 4000);
+    }, 4500);
 
     setTimeout(() => {
         if(barra && paso3) {
             barra.style.height = '100%';
             paso3.classList.add('activo-nodo');
+            
             const textoHeader = document.querySelector('.tracking-header p');
             if (textoHeader) textoHeader.innerHTML = "✨ ¡Turno Verificado con Éxito! Te esperamos.";
+            
             const radar = document.querySelector('.radar-ping');
             if (radar) {
                 radar.style.animation = "none";
                 radar.style.backgroundColor = "#c5a059";
             }
+
+            // MAGIA PREMIUM: Ocultar barra Uber y pintar el Pase Digital VIP
+            setTimeout(() => {
+                const lineaTiempo = document.getElementById('linea-tiempo-uber');
+                const contenedorTicket = document.getElementById('contenedor-ticket-wallet');
+                
+                if (lineaTiempo && contenedorTicket) {
+                    lineaTiempo.style.display = 'none';
+                    
+                    // Inyectamos la estructura visual del ticket estilo Wallet de Aerolínea
+                    contenedorTicket.innerHTML = `
+                        <div class="ticket-wallet-card">
+                            <div class="ticket-wallet-header">
+                                <span>BARBER PASS</span>
+                                <span class="ticket-premium-tag">PREMIUM ACCESS</span>
+                            </div>
+                            
+                            <div class="ticket-wallet-body">
+                                <div class="ticket-row">
+                                    <div><label>CLIENTE</label><p>${datosCita.nombre}</p></div>
+                                    <div><label>SERVICIO</label><p>${datosCita.servicio}</p></div>
+                                </div>
+                                <div class="ticket-row">
+                                    <div><label>FECHA / HORA</label><p>${datosCita.fecha} - ${datosCita.hora} HRS</p></div>
+                                    <div><label>BARBERO</label><p>${datosCita.barbero}</p></div>
+                                </div>
+                                <div class="ticket-row">
+                                    <div><label>TOTAL ESTIMADO</label><p style="color: var(--dorado-brillante); font-weight: bold;">${datosCita.precio}</p></div>
+                                    <div><label>STATUS</label><p style="color: #2ecc71; font-weight: bold;"><i class="fas fa-check-circle"></i> CONFIRMADO</p></div>
+                                </div>
+                            </div>
+                            
+                            <div class="ticket-wallet-qrcode-zone">
+                                <div id="qrcode-canvas"></div>
+                                <p class="ticket-qr-instruction">Muestra este código al llegar a la recepción</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    contenedorTicket.style.display = 'block';
+
+                    // CREACIÓN DEL CÓDIGO QR EN TIEMPO REAL CON LOS DATOS DE LA RESERVA
+                    // Este string es el que leerá el celular del barbero cuando lo escanee
+                    const stringDatosQR = `CITA CONFIRMADA\nCliente: ${datosCita.nombre}\nServicio: ${datosCita.servicio}\nBarbero: ${datosCita.barbero}\nFecha: ${datosCita.fecha} a las ${datosCita.hora} hrs.\nPrecio: ${datosCita.precio}`;
+                    
+                    new QRCode(document.getElementById("qrcode-canvas"), {
+                        text: stringDatosQR,
+                        width: 140,
+                        height: 140,
+                        colorDark : "#000000",
+                        colorLight : "#ffffff",
+                        correctLevel : QRCode.CorrectLevel.H
+                    });
+                }
+            }, 1500);
         }
     }, 9000);
 }

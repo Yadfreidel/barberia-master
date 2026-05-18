@@ -235,6 +235,41 @@ nav ul li a:hover::after { width: 100%; }
 .nota-footer { text-align: center; font-size: 0.78rem; color: #555; margin-top: 15px; font-style: italic; }
 
 /* ==========================================
+   DISEÑO EXCLUSIVO: TICKET DIGITAL WALLET
+   ========================================== */
+.ticket-wallet-card {
+    background: linear-gradient(135deg, #181818 0%, #111111 100%);
+    border: 1px solid var(--dorado); border-radius: 16px; width: 100%;
+    overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    animation: fadeInUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+.ticket-wallet-header {
+    background-color: #050505; padding: 15px 20px; border-bottom: 1px dashed rgba(197, 160, 89, 0.3);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.8rem; font-weight: bold; letter-spacing: 2px; color: var(--dorado);
+}
+.ticket-premium-tag {
+    background-color: rgba(197, 160, 89, 0.15); padding: 4px 10px; border-radius: 4px;
+    font-size: 0.7rem; color: var(--dorado-brillante); border: 1px solid rgba(197, 160, 89, 0.3);
+}
+.ticket-wallet-body { padding: 25px 20px; display: flex; flex-direction: column; gap: 18px; }
+.ticket-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.ticket-row label { font-size: 0.68rem; color: #555; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 3px; }
+.ticket-row p { font-size: 0.95rem; color: #fff; font-weight: 600; }
+
+/* Espacio del QR */
+.ticket-wallet-qrcode-zone {
+    background-color: #fff; padding: 25px 15px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 12px; border-top: 1px dashed rgba(197, 160, 89, 0.3);
+}
+#qrcode-canvas {
+    padding: 8px; background-color: #fff; border-radius: 4px;
+}
+.ticket-qr-instruction {
+    color: #555; font-size: 0.75rem; text-align: center; font-weight: 600; letter-spacing: 0.3px; margin: 0;
+}
+
+/* ==========================================
    BOTÓN FLOTANTE DISCRETO PARA EL DUEÑO
    ========================================== */
 .btn-admin-flotante {

@@ -90,7 +90,6 @@ function inicializarPagina() {
     });
 }
 
-// Generador de píldoras horarias
 function generarPildorasDeTiempo() {
     if(!contenedorHoras || !inputFecha.value) return;
     contenedorHoras.innerHTML = ''; 
@@ -157,7 +156,6 @@ function configurarFiltros() {
 }
 
 function configurarAccesosAccesoAdmin() {
-    // Acceso para Computadora (Ctrl + Shift + A)
     window.addEventListener('keydown', (e) => {
         if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
             e.preventDefault();
@@ -165,12 +163,10 @@ function configurarAccesosAccesoAdmin() {
         }
     });
 
-    // Acceso 100% Efectivo para Celular (Clic al botón flotante)
     if (btnFlotanteAdmin) {
         btnFlotanteAdmin.addEventListener('click', verificarAccesoAdmin);
     }
 
-    // Eventos del Dashboard interno
     if (btnCerrarDash) btnCerrarDash.addEventListener('click', cerrarDashboard);
     if (btnResetDatos) btnResetDatos.addEventListener('click', resetearEstadisticas);
 }
