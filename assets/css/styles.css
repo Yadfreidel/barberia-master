@@ -191,7 +191,7 @@ nav ul li a:hover::after { width: 100%; }
 .card-barbero.barbero-activo .btn-seleccionar-barbero { background-color: var(--dorado); color: #000; border-color: var(--dorado); }
 
 /* ==========================================
-   FORMULARIO DE CITAS ERGONÓMICO
+   FORMULARIO DE CITAS
    ========================================== */
 .contenedor-dinamico-contacto { width: 100%; max-width: 550px; position: relative; }
 .formulario-citas { width: 100%; display: flex; flex-direction: column; gap: 25px; background: #111; padding: 40px; border-radius: 8px; border: 1px solid #1f1f1f; transition: opacity 0.4s ease; }
@@ -209,7 +209,7 @@ nav ul li a:hover::after { width: 100%; }
 .pildora-hora.deshabilitada { background-color: #0d0d0d; color: #3a3a3a; border-color: #121212; cursor: not-allowed; opacity: 0.4; transform: none !important; }
 
 /* ==========================================
-   MONITOREO DE ESTADO EN VIVO (UBER STYLE)
+   MONITOREO DE ESTADO (UBER STYLE)
    ========================================== */
 .tracking-contenedor { width: 100%; background: #111; padding: 40px 30px; border-radius: 8px; border: 1px solid var(--dorado); box-shadow: 0 10px 40px rgba(197, 160, 89, 0.15); animation: fadeInUp 0.6s ease forwards; display: flex; flex-direction: column; }
 .tracking-contenedor.ocultar-tracking { display: none !important; }
@@ -235,7 +235,61 @@ nav ul li a:hover::after { width: 100%; }
 .nota-footer { text-align: center; font-size: 0.78rem; color: #555; margin-top: 15px; font-style: italic; }
 
 /* ==========================================
-   REGLAS MÓVILES RESPONSIVE (SMARTPHONES)
+   BOTÓN FLOTANTE DISCRETO PARA EL DUEÑO
+   ========================================== */
+.btn-admin-flotante {
+    position: fixed; bottom: 20px; left: 20px; width: 45px; height: 45px;
+    background-color: rgba(20, 20, 20, 0.75); border: 1px solid rgba(197, 160, 89, 0.3);
+    border-radius: 50%; color: rgba(197, 160, 89, 0.6); font-size: 1.1rem;
+    display: flex; justify-content: center; align-items: center; cursor: pointer;
+    z-index: 4000; backdrop-filter: blur(5px); transition: all 0.3s ease;
+}
+.btn-admin-flotante:hover {
+    background-color: var(--negro-tarjeta); border-color: var(--dorado);
+    color: var(--dorado-brillante); transform: scale(1.1); box-shadow: 0 4px 15px rgba(197, 160, 89, 0.2);
+}
+
+/* ==========================================
+   MODAL INTERFAZ DEL DASHBOARD
+   ========================================== */
+.modal-dashboard {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
+    z-index: 5000; display: flex; justify-content: center; align-items: center;
+    padding: 20px; transition: all 0.3s ease;
+}
+.modal-dashboard.ocultar-dashboard { display: none !important; }
+.dashboard-contenido {
+    background-color: #111; border: 1px solid var(--dorado); border-radius: 12px;
+    width: 100%; max-width: 600px; padding: 30px; box-shadow: 0 15px 50px rgba(197, 160, 89, 0.2);
+    display: flex; flex-direction: column; gap: 25px; animation: fadeInUp 0.4s ease forwards;
+}
+.dashboard-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding-bottom: 15px; }
+.dashboard-header h2 { font-size: 1.3rem; color: var(--blanco); letter-spacing: 1px; }
+.dashboard-header h2 i { color: var(--dorado); margin-right: 8px; }
+.btn-cerrar { background: transparent; border: none; color: #666; font-size: 2rem; cursor: pointer; transition: color 0.2s ease; line-height: 1; }
+.btn-cerrar:hover { color: #fff; }
+
+.metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.metric-card { background-color: #161616; border: 1px solid #252525; border-radius: 8px; padding: 20px; display: flex; align-items: center; gap: 15px; }
+.metric-card.ganancias { border-color: #1c3d27; }
+.metric-card.ganancias .metric-icon i { color: #2ecc71; }
+.metric-icon { font-size: 1.8rem; color: var(--dorado); }
+.metric-info h3 { font-size: 1.6rem; color: #fff; font-weight: 700; margin-bottom: 2px; }
+.metric-info p { font-size: 0.8rem; color: var(--gris-texto); text-transform: uppercase; letter-spacing: 0.5px; }
+
+.details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.detail-box { background-color: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 6px; padding: 15px; display: flex; flex-direction: column; gap: 8px; }
+.detail-box h4 { font-size: 0.85rem; color: var(--gris-texto); text-transform: uppercase; }
+.detail-box h4 i { color: var(--dorado); margin-right: 5px; }
+.detail-box p { font-size: 1.05rem; color: #fff; font-weight: 600; }
+.badge { align-self: flex-start; background-color: rgba(197, 160, 89, 0.15); color: var(--dorado-brillante); font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(197, 160, 89, 0.3); font-weight: bold; }
+
+.btn-danger { padding: 12px; background-color: #1a0f11; color: #e74c3c; border: 1px solid #3a1a1d; border-radius: 6px; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; cursor: pointer; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s ease; }
+.btn-danger:hover { background-color: #e74c3c; color: #fff; }
+
+/* ==========================================
+   REGLAS MÓVILES RESPONSIVE
    ========================================== */
 @media (max-width: 768px) {
     header { flex-direction: column; gap: 15px; padding: 15px 20px; }
@@ -256,87 +310,7 @@ nav ul li a:hover::after { width: 100%; }
     .card-servicio p { min-height: auto; margin-bottom: 15px; }
     .formulario-citas, .tracking-contenedor { padding: 25px 20px; }
     .linea-tiempo { gap: 35px; }
-}
-/* ==========================================
-   MODAL INTERFAZ DEL DASHBOARD (ADMIN PANEL)
-   ========================================== */
-.modal-dashboard {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
-    z-index: 5000; display: flex; justify-content: center; align-items: center;
-    padding: 20px; transition: all 0.3s ease;
-}
-
-.modal-dashboard.ocultar-dashboard {
-    display: none !important;
-}
-
-.dashboard-contenido {
-    background-color: #111; border: 1px solid var(--dorado); border-radius: 12px;
-    width: 100%; max-width: 600px; padding: 30px; box-shadow: 0 15px 50px rgba(197, 160, 89, 0.2);
-    display: flex; flex-direction: column; gap: 25px; animation: fadeInUp 0.4s ease forwards;
-}
-
-.dashboard-header {
-    display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 1px solid #222; padding-bottom: 15px;
-}
-
-.dashboard-header h2 { font-size: 1.3rem; color: var(--blanco); letter-spacing: 1px; }
-.dashboard-header h2 i { color: var(--dorado); margin-right: 8px; }
-
-.btn-cerrar {
-    background: transparent; border: none; color: #666; font-size: 2rem;
-    cursor: pointer; transition: color 0.2s ease; line-height: 1;
-}
-.btn-cerrar:hover { color: #fff; }
-
-/* Contenedor de bloques cuadriculados de métricas */
-.metrics-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-}
-
-.metric-card {
-    background-color: #161616; border: 1px solid #252525; border-radius: 8px;
-    padding: 20px; display: flex; align-items: center; gap: 15px;
-}
-
-.metric-card.ganancias { border-color: #1c3d27; }
-.metric-card.ganancias .metric-icon i { color: #2ecc71; }
-
-.metric-icon { font-size: 1.8rem; color: var(--dorado); }
-.metric-info h3 { font-size: 1.6rem; color: #fff; font-weight: 700; margin-bottom: 2px; }
-.metric-info p { font-size: 0.8rem; color: var(--gris-texto); text-transform: uppercase; letter-spacing: 0.5px; }
-
-/* Rejilla de detalles secundarios */
-.details-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-}
-
-.detail-box {
-    background-color: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 6px; padding: 15px;
-    display: flex; flex-direction: column; gap: 8px;
-}
-
-.detail-box h4 { font-size: 0.85rem; color: var(--gris-texto); text-transform: uppercase; }
-.detail-box h4 i { color: var(--dorado); margin-right: 5px; }
-.detail-box p { font-size: 1.05rem; color: #fff; font-weight: 600; }
-
-.badge {
-    align-self: flex-start; background-color: rgba(197, 160, 89, 0.15);
-    color: var(--dorado-brillante); font-size: 0.75rem; padding: 4px 10px;
-    border-radius: 12px; border: 1px solid rgba(197, 160, 89, 0.3); font-weight: bold;
-}
-
-.btn-danger {
-    padding: 12px; background-color: #1a0f11; color: #e74c3c; border: 1px solid #3a1a1d;
-    border-radius: 6px; font-weight: bold; font-size: 0.85rem; text-transform: uppercase;
-    cursor: pointer; letter-spacing: 1px; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px;
-}
-.btn-danger:hover { background-color: #e74c3c; color: #fff; }
-
-/* Adaptación responsive para pantallas pequeñas */
-@media (max-width: 550px) {
+    .btn-admin-flotante { bottom: 15px; left: 15px; width: 42px; height: 42px; font-size: 1rem; }
     .metrics-grid, .details-grid { grid-template-columns: 1fr; gap: 15px; }
     .dashboard-contenido { padding: 20px; }
 }

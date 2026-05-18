@@ -19,11 +19,11 @@ export function procesarCita(evento) {
 
     const fechaFormateada = fecha.split('-').reverse().join('/');
 
-    // NUEVO: Buscar el objeto servicio del catálogo para capturar el precio real
+    // Buscar el objeto servicio para capturar su precio real
     const objetoServicio = serviciosBarberia.find(s => s.nombre === servicio) || { precio: "$0.00" };
 
-    // GUARDAR EN SECRETO LOS DATOS PARA LAS ESTADÍSTICAS DEL DUEÑO
-    guardarMetricasAnalíticas({
+    // GUARDAR EN MEMORIA PARA LAS ESTADÍSTICAS DEL DUEÑO
+    guardarMetricasAnaliticas({
         servicio: servicio,
         precio: objetoServicio.precio,
         barbero: barbero,
@@ -42,8 +42,10 @@ export function procesarCita(evento) {
 
     const urlWhatsApp = `https://wa.me/${TU_TELEFONO}?text=${mensajeWhatsApp}`;
     
+    // Iniciar el tracking en la web primero
     activarPantallaSeguimiento({ nombre, servicio, barbero, hora, fecha: fechaFormateada });
 
+    // Abrir WhatsApp con mini retraso para asegurar transiciones estables
     setTimeout(() => {
         window.open(urlWhatsApp, '_blank');
     }, 100);
@@ -51,8 +53,7 @@ export function procesarCita(evento) {
     evento.target.reset();
 }
 
-// Función encargada de inyectar los datos en la memoria local
-function guardarMetricasAnalíticas(nuevaCita) {
+function guardarMetricasAnaliticas(nuevaCita) {
     let historial = JSON.parse(localStorage.getItem('barber_analytics_citas')) || [];
     historial.push(nuevaCita);
     localStorage.setItem('barber_analytics_citas', JSON.stringify(historial));

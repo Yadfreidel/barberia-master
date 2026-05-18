@@ -14,7 +14,7 @@ const formulario = document.getElementById('form-reservas');
 const botonesFiltro = document.querySelectorAll('.btn-filtro');
 
 // Elementos del Dashboard
-const logoAdmin = document.getElementById('logo-admin');
+const btnFlotanteAdmin = document.getElementById('btn-flotante-admin');
 const btnCerrarDash = document.getElementById('btn-cerrar-dashboard');
 const btnResetDatos = document.getElementById('btn-reset-datos');
 
@@ -30,7 +30,7 @@ function inicializarPagina() {
         inputFecha.addEventListener('change', generarPildorasDeTiempo);
     }
 
-    // 1. Renderizar Servicios
+    // 1. Renderizar Servicios del Catálogo
     if(gridServicios) {
         gridServicios.innerHTML = '';
         serviciosBarberia.forEach(servicio => {
@@ -57,7 +57,7 @@ function inicializarPagina() {
         });
     }
 
-    // 2. Renderizar Staff
+    // 2. Renderizar Staff de Barberos
     if(gridStaff) {
         gridStaff.innerHTML = '';
         staffBarberia.forEach(barbero => {
@@ -90,6 +90,7 @@ function inicializarPagina() {
     });
 }
 
+// Generador de píldoras horarias
 function generarPildorasDeTiempo() {
     if(!contenedorHoras || !inputFecha.value) return;
     contenedorHoras.innerHTML = ''; 
@@ -155,9 +156,8 @@ function configurarFiltros() {
     });
 }
 
-// NUEVA FUNCIÓN: Configurar accesos ocultos para el administrador
 function configurarAccesosAccesoAdmin() {
-    // Acceso 1: Combinación de Teclas (Computadora) -> Ctrl + Shift + A
+    // Acceso para Computadora (Ctrl + Shift + A)
     window.addEventListener('keydown', (e) => {
         if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
             e.preventDefault();
@@ -165,25 +165,12 @@ function configurarAccesosAccesoAdmin() {
         }
     });
 
-    // Acceso 2: Mantener presionado el logo (Celular) -> 3 Segundos
-    let tiempoPresionado;
-    if(logoAdmin) {
-        logoAdmin.addEventListener('touchstart', () => {
-            tiempoPresionado = setTimeout(verificarAccesoAdmin, 3000);
-        });
-        logoAdmin.addEventListener('touchend', () => {
-            clearTimeout(tiempoPresionado);
-        });
-        // Soporte extra para mouse de PC
-        logoAdmin.addEventListener('mousedown', () => {
-            tiempoPresionado = setTimeout(verificarAccesoAdmin, 3000);
-        });
-        logoAdmin.addEventListener('mouseup', () => {
-            clearTimeout(tiempoPresionado);
-        });
+    // Acceso 100% Efectivo para Celular (Clic al botón flotante)
+    if (btnFlotanteAdmin) {
+        btnFlotanteAdmin.addEventListener('click', verificarAccesoAdmin);
     }
 
-    // Eventos de botones internos del Dashboard
+    // Eventos del Dashboard interno
     if (btnCerrarDash) btnCerrarDash.addEventListener('click', cerrarDashboard);
     if (btnResetDatos) btnResetDatos.addEventListener('click', resetearEstadisticas);
 }
