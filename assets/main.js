@@ -12,21 +12,21 @@ const contenedorHoras = document.getElementById('contenedor-horas');
 const formulario = document.getElementById('form-reservas');
 const botonesFiltro = document.querySelectorAll('.btn-filtro');
 
-// Configuración del listado maestro de horas comerciales de la barbería
+// Horas comerciales de la barbería
 const HORARIOS_DISPONIBLES = [
     "09:00", "10:00", "11:00", "12:00", "13:00", 
     "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"
 ];
 
 function inicializarPagina() {
-    // Bloquear fechas pasadas en el calendario nativo
+    // Bloquear selección de días anteriores en el calendario
     if(inputFecha) {
         const hoy = new Date().toISOString().split('T')[0];
         inputFecha.min = hoy;
         inputFecha.addEventListener('change', generarPildorasDeTiempo);
     }
 
-    // 1. Renderizar Catálogo
+    // 1. Renderizar Servicios del Catálogo
     if(gridServicios) {
         gridServicios.innerHTML = '';
         serviciosBarberia.forEach(servicio => {
@@ -53,7 +53,7 @@ function inicializarPagina() {
         });
     }
 
-    // 2. Renderizar Staff
+    // 2. Renderizar Staff de Barberos
     if(gridStaff) {
         gridStaff.innerHTML = '';
         staffBarberia.forEach(barbero => {
@@ -76,7 +76,7 @@ function inicializarPagina() {
 
     configurarFiltros();
 
-    // Redirecciones fluidas
+    // Redirección fluida al hacer clic en el catálogo hacia los barberos
     const botonesElegir = document.querySelectorAll('.btn-card-reserva');
     botonesElegir.forEach(boton => {
         boton.addEventListener('click', (e) => {
@@ -86,16 +86,15 @@ function inicializarPagina() {
     });
 }
 
-// NUEVA FUNCIÓN: Generador inteligente de bloques de horas
+// Generador de píldoras horarias con filtro de tiempo real
 function generarPildorasDeTiempo() {
     if(!contenedorHoras || !inputFecha.value) return;
     
-    contenedorHoras.innerHTML = ''; // Limpiar estado anterior
-    inputHora.value = ''; // Resetear hora previamente oculta
+    contenedorHoras.innerHTML = ''; 
+    inputHora.value = ''; 
 
     const fechaSeleccionada = inputFecha.value;
     const fechaActualStr = new Date().toISOString().split('T')[0];
-    
     const ahora = new Date();
     const horaActual = ahora.getHours();
     const minutosActuales = ahora.getMinutes();
@@ -105,29 +104,27 @@ function generarPildorasDeTiempo() {
         pildora.classList.add('pildora-hora');
         pildora.textContent = horaTexto;
 
-        // Descomponer horas para validaciones matemáticas
-        const [horaBloque, minutosBloque] = horaTexto.split(':').map(Number);
+        const [horaBloque] = horaTexto.split(':').map(Number);
 
-        // Si es el día de hoy, deshabilitar horas pasadas
+        // Deshabilitar horas que ya pasaron si se elige el día de hoy
         if (fechaSeleccionada === fechaActualStr) {
             if (horaBloque < horaActual || (horaBloque === horaActual && minutosActuales > 0)) {
                 pildora.classList.add('deshabilitada');
             }
         }
 
-        // Lógica de click únicamente si el horario es válido
         if (!pildora.classList.contains('deshabilitada')) {
             pildora.addEventListener('click', () => {
                 document.querySelectorAll('.pildora-hora').forEach(p => p.classList.remove('pildora-activa'));
                 pildora.classList.add('pildora-activa');
-                inputHora.value = horaTexto; // Guardar valor final
+                inputHora.value = horaTexto; 
             });
         }
-
         contenedorHoras.appendChild(pildora);
     });
 }
 
+// Manejo interactivo de selección visual de barberos
 function configurarSeleccionBarberos() {
     const tarjetasBarberos = document.querySelectorAll('.card-barbero');
     tarjetasBarberos.forEach(tarjeta => {
@@ -141,6 +138,7 @@ function configurarSeleccionBarberos() {
     });
 }
 
+// Barra de filtrado interactivo del catálogo
 function configurarFiltros() {
     botonesFiltro.forEach(boton => {
         boton.addEventListener('click', (e) => {

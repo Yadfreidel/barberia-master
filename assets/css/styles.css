@@ -45,7 +45,7 @@ body {
 }
 
 /* ==========================================
-   ENCABEZADO / NAVEGACIÓN (ESCRITORIO)
+   ENCABEZADO / NAVEGACIÓN
    ========================================== */
 header {
     display: flex;
@@ -105,7 +105,7 @@ nav ul li a:hover::after { width: 100%; }
 }
 
 /* ==========================================
-   ESTILOS DE LA BARRA DE FILTRADO INTERACTIVO
+   FILTRADO INTERACTIVO
    ========================================== */
 #catalogo-seccion, #contacto {
     padding: 80px 8%;
@@ -123,386 +123,137 @@ nav ul li a:hover::after { width: 100%; }
 }
 
 .filtros-contenedor {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 50px;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: flex; gap: 15px; margin-bottom: 50px; flex-wrap: wrap; justify-content: center;
 }
 
 .btn-filtro {
-    padding: 12px 25px;
-    background-color: var(--negro-tarjeta);
-    color: var(--blanco);
-    border: 1px solid #222;
-    border-radius: 30px;
-    cursor: pointer;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    padding: 12px 25px; background-color: var(--negro-tarjeta); color: var(--blanco);
+    border: 1px solid #222; border-radius: 30px; cursor: pointer; font-weight: 600;
+    text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: all 0.3s ease;
+    display: flex; align-items: center; gap: 8px;
 }
-
 .btn-filtro i { color: var(--gris-texto); font-size: 0.9rem; }
 .btn-filtro:hover { border-color: var(--dorado); color: var(--dorado); }
 .btn-filtro.activo { background-color: var(--dorado); color: #000; border-color: var(--dorado); }
 .btn-filtro.activo i { color: #000; }
 
 /* ==========================================
-   GRILLA DINÁMICA Y COMPORTAMIENTO DE TARJETAS
+   GRILLA Y TARJETAS DE SERVICIOS
    ========================================== */
 .grid-servicios {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    width: 100%;
-    max-width: 1200px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px; width: 100%; max-width: 1200px;
 }
 
 .card-servicio {
-    background: var(--negro-tarjeta);
-    border-radius: 6px;
-    border: 1px solid #1f1f1f;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    opacity: 1;
-    transform: scale(1);
+    background: var(--negro-tarjeta); border-radius: 6px; border: 1px solid #1f1f1f;
+    display: flex; flex-direction: column; overflow: hidden; opacity: 1; transform: scale(1);
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.3s ease, transform 0.3s ease;
 }
+.card-servicio.ocultar-card { display: none; opacity: 0; transform: scale(0.8); }
+.card-servicio:hover { border-color: var(--dorado); transform: translateY(-8px); box-shadow: 0 12px 30px rgba(197, 160, 89, 0.12); }
 
-.card-servicio.ocultar-card {
-    display: none;
-    opacity: 0;
-    transform: scale(0.8);
-}
-
-.card-servicio:hover {
-    border-color: var(--dorado); transform: translateY(-8px); box-shadow: 0 12px 30px rgba(197, 160, 89, 0.12);
-}
 .card-imagen-contenedor { width: 100%; height: 200px; overflow: hidden; position: relative; }
 .card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
 .card-servicio:hover .card-img { transform: scale(1.1) rotate(0.5deg); }
 
-.card-info {
-    padding: 25px; display: flex; flex-direction: column; flex-grow: 1;
-    justify-content: space-between; align-items: center; text-align: center;
-}
+.card-info { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; align-items: center; text-align: center; }
 .card-servicio h3 { font-size: 1.25rem; margin-bottom: 10px; color: var(--blanco); }
 .card-servicio:hover h3 { color: var(--dorado-brillante); }
 .card-servicio p { color: var(--gris-texto); font-size: 0.9rem; margin-bottom: 15px; min-height: 54px; }
 .precio-tag { color: var(--dorado-brillante); font-weight: 700; font-size: 1.3rem; margin-bottom: 15px; }
 
 .btn-card-reserva {
-    padding: 11px 20px; background-color: transparent; color: var(--dorado);
-    border: 1px solid var(--dorado); font-weight: bold; text-transform: uppercase;
-    cursor: pointer; font-size: 0.8rem; letter-spacing: 1px; transition: all 0.3s ease; width: 100%;
+    padding: 11px 20px; background-color: transparent; color: var(--dorado); border: 1px solid var(--dorado);
+    font-weight: bold; text-transform: uppercase; cursor: pointer; font-size: 0.8rem; letter-spacing: 1px; transition: all 0.3s ease; width: 100%;
 }
 .btn-card-reserva:hover { background-color: var(--dorado); color: #000; }
 
 /* ==========================================
-   FORMULARIO DE CITAS
-   ========================================== */
-.formulario-citas {
-    width: 100%; max-width: 550px; display: flex; flex-direction: column; gap: 25px;
-    background: #111; padding: 40px; border-radius: 8px; border: 1px solid #1f1f1f;
-}
-.formulario-citas input, .formulario-citas select {
-    padding: 16px; background-color: var(--negro-tarjeta); border: 1px solid #222;
-    color: #fff; font-size: 1rem; border-radius: 4px; transition: all 0.3s ease; width: 100%;
-}
-.formulario-citas input:focus, .formulario-citas select:focus {
-    border-color: var(--dorado); outline: none; background-color: #1a1a1a;
-    box-shadow: 0 0 10px rgba(197, 160, 89, 0.2);
-}
-.fecha-hora { display: flex; gap: 15px; }
-.fecha-hora input { flex: 1; }
-
-
-/* ==========================================
-   MÓDULO RESPONSIVE: AJUSTES PARA SMARTPHONES
-   (Android & iPhone)
-   ========================================== */
-@media (max-width: 768px) {
-    /* 1. Ajustes del Menú del Header */
-    header {
-        flex-direction: column;
-        gap: 15px;
-        padding: 15px 20px;
-    }
-    
-    nav ul {
-        width: 100%;
-        justify-content: center;
-        padding: 0;
-    }
-    
-    nav ul li {
-        margin: 0 12px; /* Espaciado balanceado para pulsar con el dedo */
-    }
-
-    nav ul li a {
-        font-size: 0.8rem;
-    }
-
-    /* 2. Optimización del Hero (Tipografías legibles sin desborde) */
-    .hero {
-        height: 65vh; /* Un poco más bajo en móviles para ver que hay contenido abajo */
-    }
-
-    .hero-content h2 {
-        font-size: 2.1rem; /* Reducido para que quepa en cualquier iPhone o Android */
-        letter-spacing: 2px;
-        line-height: 1.3;
-    }
-
-    .hero-content p {
-        font-size: 1rem;
-        margin-bottom: 25px;
-    }
-
-    .btn-reserva {
-        padding: 14px 30px;
-        font-size: 0.85rem;
-    }
-
-    /* 3. Secciones y Títulos */
-    #catalogo-seccion, #contacto {
-        padding: 50px 5%; /* Menos márgenes laterales para ganar espacio de lectura */
-    }
-
-    .seccion-titulo {
-        font-size: 1.8rem;
-        margin-bottom: 8px;
-    }
-
-    .seccion-subtitulo {
-        font-size: 0.95rem;
-        margin-bottom: 30px;
-    }
-
-    /* 4. Menú de Filtros (Píldoras touch con scroll o ajuste elástico) */
-    .filtros-contenedor {
-        gap: 10px;
-        margin-bottom: 35px;
-    }
-
-    .btn-filtro {
-        padding: 10px 18px;
-        font-size: 0.75rem;
-    }
-
-    /* 5. Catálogo en una sola columna limpia */
-    .grid-servicios {
-        grid-template-columns: 1fr; /* Fuerza una tarjeta abajo de la otra */
-        gap: 25px;
-    }
-
-    .card-imagen-contenedor {
-        height: 180px; /* Foto ligeramente más baja en teléfonos */
-    }
-
-    .card-info {
-        padding: 20px;
-    }
-
-    .card-servicio p {
-        min-height: auto; /* En teléfonos no hace falta forzar la altura fija */
-        margin-bottom: 15px;
-    }
-
-    /* 6. Formulario Móvil Ultra Ergonómico */
-    .formulario-citas {
-        padding: 25px 20px; /* Reducimos el padding interno del bloque */
-    }
-
-    .fecha-hora {
-        flex-direction: column; /* Apila la fecha arriba de la hora */
-        gap: 20px;
-    }
-}
-/* ==========================================
-   ESTILOS DE LA SECCIÓN STAFF (BARBEROS)
+   SECCIÓN STAFF (BARBEROS)
    ========================================== */
 #staff-seccion {
-    padding: 80px 8%;
-    background-color: #0d0d0d; /* Fondo ligeramente contrastado */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-top: 1px solid rgba(197, 160, 89, 0.1);
-    border-bottom: 1px solid rgba(197, 160, 89, 0.1);
+    padding: 80px 8%; background-color: #0d0d0d; display: flex; flex-direction: column; align-items: center;
+    border-top: 1px solid rgba(197, 160, 89, 0.1); border-bottom: 1px solid rgba(197, 160, 89, 0.1);
 }
+.grid-staff { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; width: 100%; max-width: 1100px; margin-top: 20px; }
+.card-barbero { background: var(--negro-tarjeta); border: 1px solid #1a1a1a; border-radius: 12px; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); position: relative; }
+.barbero-img-contenedor { width: 130px; height: 130px; border-radius: 50%; overflow: hidden; margin-bottom: 20px; border: 2px solid #222; transition: all 0.3s ease; }
+.barbero-img-contenedor img { width: 100%; height: 100%; object-fit: cover; }
+.barbero-info h4 { font-size: 1.3rem; color: var(--blanco); margin-bottom: 8px; letter-spacing: 1px; }
+.barbero-info p { color: var(--gris-texto); font-size: 0.88rem; margin-bottom: 25px; min-height: 40px; }
+.btn-seleccionar-barbero { padding: 10px 25px; background-color: transparent; color: var(--gris-texto); border: 1px solid #333; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; width: 80%; }
+.card-barbero:hover .barbero-img-contenedor { border-color: var(--dorado); transform: scale(1.05); }
+.btn-seleccionar-barbero:hover { border-color: var(--dorado); color: var(--dorado); }
 
-.grid-staff {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 40px;
-    width: 100%;
-    max-width: 1100px;
-    margin-top: 20px;
-}
-
-.card-barbero {
-    background: var(--negro-tarjeta);
-    border: 1px solid #1a1a1a;
-    border-radius: 12px;
-    padding: 30px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    position: relative;
-}
-
-/* Contenedor de la foto de perfil circular */
-.barbero-img-contenedor {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-bottom: 20px;
-    border: 2px solid #222;
-    transition: all 0.3s ease;
-}
-
-.barbero-img-contenedor img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.barbero-info h4 {
-    font-size: 1.3rem;
-    color: var(--blanco);
-    margin-bottom: 8px;
-    letter-spacing: 1px;
-}
-
-.barbero-info p {
-    color: var(--gris-texto);
-    font-size: 0.88rem;
-    margin-bottom: 25px;
-    min-height: 40px;
-}
-
-.btn-seleccionar-barbero {
-    padding: 10px 25px;
-    background-color: transparent;
-    color: var(--gris-texto);
-    border: 1px solid #333;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.3s ease;
-    width: 80%;
-}
-
-.card-barbero:hover .barbero-img-contenedor {
-    border-color: var(--dorado);
-    transform: scale(1.05);
-}
-
-.btn-seleccionar-barbero:hover {
-    border-color: var(--dorado);
-    color: var(--dorado);
-}
+.card-barbero.barbero-activo { border-color: var(--dorado); box-shadow: 0 0 25px rgba(197, 160, 89, 0.2); background: linear-gradient(145deg, #141414, #1a160e); }
+.card-barbero.barbero-activo .barbero-img-contenedor { border-color: var(--dorado); box-shadow: 0 0 15px rgba(197, 160, 89, 0.4); }
+.card-barbero.barbero-activo .btn-seleccionar-barbero { background-color: var(--dorado); color: #000; border-color: var(--dorado); }
 
 /* ==========================================
-   ESTADO SELECCIONADO (Efecto Oro Premium)
+   FORMULARIO DE CITAS ERGONÓMICO
    ========================================== */
-.card-barbero.barbero-activo {
-    border-color: var(--dorado);
-    box-shadow: 0 0 25px rgba(197, 160, 89, 0.2);
-    background: linear-gradient(145deg, #141414, #1a160e);
-}
+.contenedor-dinamico-contacto { width: 100%; max-width: 550px; position: relative; }
+.formulario-citas { width: 100%; display: flex; flex-direction: column; gap: 25px; background: #111; padding: 40px; border-radius: 8px; border: 1px solid #1f1f1f; transition: opacity 0.4s ease; }
+.formulario-citas input, .formulario-citas select { padding: 16px; background-color: var(--negro-tarjeta); border: 1px solid #222; color: #fff; font-size: 1rem; border-radius: 4px; transition: all 0.3s ease; width: 100%; }
+.formulario-citas input:focus, .formulario-citas select:focus { border-color: var(--dorado); outline: none; background-color: #1a1a1a; box-shadow: 0 0 10px rgba(197, 160, 89, 0.2); }
 
-.card-barbero.barbero-activo .barbero-img-contenedor {
-    border-color: var(--dorado);
-    box-shadow: 0 0 15px rgba(197, 160, 89, 0.4);
-}
+/* ==========================================
+   TIME-PICKER DE HORAS
+   ========================================== */
+.calendario-contenedor { width: 100%; background-color: var(--negro-fondo); padding: 20px; border-radius: 6px; border: 1px solid #1c1c1c; margin-bottom: 5px; }
+.grid-horas { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 12px; margin-top: 15px; width: 100%; }
+.pildora-hora { padding: 12px 5px; background-color: #161616; color: var(--blanco); border: 1px solid #262626; border-radius: 6px; text-align: center; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.25s ease; user-select: none; }
+.pildora-hora:hover { border-color: var(--dorado); color: var(--dorado); transform: translateY(-2px); }
+.pildora-hora.pildora-activa { background-color: var(--dorado); color: #000; border-color: var(--dorado); box-shadow: 0 4px 12px rgba(197, 160, 89, 0.3); }
+.pildora-hora.deshabilitada { background-color: #0d0d0d; color: #3a3a3a; border-color: #121212; cursor: not-allowed; opacity: 0.4; transform: none !important; }
 
-.card-barbero.barbero-activo .btn-seleccionar-barbero {
-    background-color: var(--dorado);
-    color: #000;
-    border-color: var(--dorado);
-}
+/* ==========================================
+   MONITOREO DE ESTADO EN VIVO (UBER STYLE)
+   ========================================== */
+.tracking-contenedor { width: 100%; background: #111; padding: 40px 30px; border-radius: 8px; border: 1px solid var(--dorado); box-shadow: 0 10px 40px rgba(197, 160, 89, 0.15); animation: fadeInUp 0.6s ease forwards; display: flex; flex-direction: column; }
+.tracking-contenedor.ocultar-tracking { display: none !important; }
+.tracking-header { text-align: center; margin-bottom: 25px; position: relative; }
+.tracking-header h3 { font-size: 1.5rem; color: var(--blanco); letter-spacing: 1px; }
+.tracking-header p span { color: var(--dorado-brillante); font-weight: bold; }
+.radar-ping { width: 12px; height: 12px; background-color: #00ff66; border-radius: 50%; margin: 0 auto 10px auto; position: relative; }
+.radar-ping::after { content: ''; position: absolute; width: 100%; height: 100%; top: 0; left: 0; border-radius: 50%; background-color: #00ff66; animation: pulseDorado 1.5s infinite ease-in-out; }
+.resumen-ticket { background-color: #161616; border: 1px solid #222; padding: 15px; border-radius: 6px; margin-bottom: 35px; font-size: 0.9rem; display: flex; flex-direction: column; gap: 8px; }
+.resumen-ticket i { color: var(--dorado); margin-right: 8px; width: 18px; }
 
-/* Adaptación responsiva para teléfonos */
+.linea-tiempo { position: relative; display: flex; flex-direction: column; gap: 40px; padding-left: 45px; margin-bottom: 20px; }
+.barra-progreso-fondo { position: absolute; left: 19px; top: 10px; width: 4px; height: calc(100% - 20px); background-color: #222; border-radius: 2px; }
+.barra-progreso-llena { width: 100%; height: 0%; background: linear-gradient(to bottom, var(--dorado), var(--dorado-brillante)); border-radius: 2px; transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
+.paso-tracking { position: relative; display: flex; align-items: center; gap: 20px; transition: all 0.4s ease; }
+.icono-nodo { position: absolute; left: -45px; width: 42px; height: 42px; background-color: #161616; border: 2px solid #292929; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #444; font-size: 0.95rem; z-index: 2; transition: all 0.5s ease; }
+.texto-nodo h4 { font-size: 1.1rem; color: #444; transition: color 0.4s ease; }
+.texto-nodo p { font-size: 0.85rem; color: #333; transition: color 0.4s ease; }
+
+.paso-tracking.activo-nodo .icono-nodo { background-color: #000; border-color: var(--dorado); color: var(--dorado-brillante); box-shadow: 0 0 15px rgba(197, 160, 89, 0.4); }
+.paso-tracking.activo-nodo .texto-nodo h4 { color: var(--blanco); }
+.paso-tracking.activo-nodo .texto-nodo p { color: var(--gris-texto); }
+.nota-footer { text-align: center; font-size: 0.78rem; color: #555; margin-top: 15px; font-style: italic; }
+
+/* ==========================================
+   REGLAS MÓVILES RESPONSIVE (SMARTPHONES)
+   ========================================== */
 @media (max-width: 768px) {
-    #staff-seccion {
-        padding: 50px 5%;
-    }
-    .grid-staff {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
-    .card-barbero {
-        padding: 25px 15px;
-    }
-}
-/* ==========================================
-   ESTILOS DE AGENDA DE HORAS (TIME-PICKER)
-   ========================================== */
-.calendario-contenedor {
-    width: 100%;
-    background-color: var(--negro-fondo);
-    padding: 20px;
-    border-radius: 6px;
-    border: 1px solid #1c1c1c;
-    margin-bottom: 5px;
-}
-
-.grid-horas {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
-    gap: 12px;
-    margin-top: 15px;
-    width: 100%;
-}
-
-.pildora-hora {
-    padding: 12px 5px;
-    background-color: #161616;
-    color: var(--blanco);
-    border: 1px solid #262626;
-    border-radius: 6px;
-    text-align: center;
-    font-weight: 600;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    user-select: none;
-}
-
-.pildora-hora:hover {
-    border-color: var(--dorado);
-    color: var(--dorado);
-    transform: translateY(-2px);
-}
-
-/* Estado cuando el usuario la selecciona */
-.pildora-hora.pildora-activa {
-    background-color: var(--dorado);
-    color: #000;
-    border-color: var(--dorado);
-    box-shadow: 0 4px 12px rgba(197, 160, 89, 0.3);
-}
-
-/* Estado deshabilitado (Horas que ya pasaron en el día) */
-.pildora-hora.deshabilitada {
-    background-color: #0d0d0d;
-    color: #3a3a3a;
-    border-color: #121212;
-    cursor: not-allowed;
-    opacity: 0.4;
-    transform: none !important;
+    header { flex-direction: column; gap: 15px; padding: 15px 20px; }
+    nav ul { width: 100%; justify-content: center; padding: 0; }
+    nav ul li { margin: 0 12px; }
+    nav ul li a { font-size: 0.8rem; }
+    .hero-content h2 { font-size: 2.1rem; letter-spacing: 2px; line-height: 1.3; }
+    .hero-content p { font-size: 1rem; margin-bottom: 25px; }
+    .btn-reserva { padding: 14px 30px; font-size: 0.85rem; }
+    #catalogo-seccion, #contacto, #staff-seccion { padding: 50px 5%; }
+    .seccion-titulo { font-size: 1.8rem; margin-bottom: 8px; }
+    .seccion-subtitulo { font-size: 0.95rem; margin-bottom: 30px; }
+    .filtros-contenedor { gap: 10px; margin-bottom: 35px; }
+    .btn-filtro { padding: 10px 18px; font-size: 0.75rem; }
+    .grid-servicios, .grid-staff { grid-template-columns: 1fr; gap: 25px; }
+    .card-imagen-contenedor { height: 180px; }
+    .card-info { padding: 20px; }
+    .card-servicio p { min-height: auto; margin-bottom: 15px; }
+    .formulario-citas, .tracking-contenedor { padding: 25px 20px; }
+    .linea-tiempo { gap: 35px; }
 }

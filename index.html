@@ -52,32 +52,40 @@
     </section>
 
     <section id="contacto">
-        <h2 class="seccion-titulo">Agenda tu Cita Elite</h2>
-        <form class="formulario-citas" id="form-reservas">
-            <input type="hidden" id="barbero-seleccionado" value="" required>
-            <input type="hidden" id="hora-seleccionada" value="" required>
-
-            <input type="text" id="nombre" placeholder="Nombre Completo" required>
-            <input type="email" id="email" placeholder="Correo Electrónico" required>
-            <input type="tel" id="telefono" placeholder="Teléfono de Contacto" required>
+        <div class="contenedor-dinamico-contacto">
             
-            <label for="servicio-select" style="color: #c5a059; font-weight: bold; margin-bottom: -10px; font-size: 0.9rem;">Servicio Solicitado:</label>
-            <select id="servicio-select" required>
-                <option value="" disabled selected>-- Elige un corte del catálogo --</option>
-            </select>
-
-            <div class="calendario-contenedor">
-                <label for="fecha" style="color: #c5a059; font-weight: bold; font-size: 0.9rem;">1. Selecciona el Día:</label>
-                <input type="date" id="fecha" required>
+            <form class="formulario-citas" id="form-reservas">
+                <h2 class="seccion-titulo" style="font-size: 1.8rem; margin-bottom: 5px;">Agenda tu Cita Elite</h2>
+                <p class="seccion-subtitulo" style="margin-bottom: 25px; font-size: 0.9rem;">Completa tus datos para procesar el turno</p>
                 
-                <label style="color: #c5a059; font-weight: bold; font-size: 0.9rem; margin-top: 15px; display: block;">2. Horas Disponibles:</label>
-                <div id="contenedor-horas" class="grid-horas">
-                    <p style="color: var(--gris-texto); font-size: 0.9rem; font-style: italic;">Por favor, selecciona una fecha primero...</p>
-                </div>
-            </div>
+                <input type="hidden" id="barbero-seleccionado" value="" required>
+                <input type="hidden" id="hora-seleccionada" value="" required>
 
-            <button type="submit" class="btn-reserva">Confirmar Mi Turno</button>
-        </form>
+                <input type="text" id="nombre" placeholder="Nombre Completo" required>
+                <input type="email" id="email" placeholder="Correo Electrónico" required>
+                <input type="tel" id="telefono" placeholder="Teléfono de Contacto" required>
+                
+                <label for="servicio-select" style="color: #c5a059; font-weight: bold; margin-bottom: -10px; font-size: 0.9rem;">Servicio Solicitado:</label>
+                <select id="servicio-select" required>
+                    <option value="" disabled selected>-- Elige un corte del catálogo --</option>
+                </select>
+
+                <div class="calendario-contenedor">
+                    <label for="fecha" style="color: #c5a059; font-weight: bold; font-size: 0.9rem;">1. Selecciona el Día:</label>
+                    <input type="date" id="fecha" required>
+                    
+                    <label style="color: #c5a059; font-weight: bold; font-size: 0.9rem; margin-top: 15px; display: block;">2. Horas Disponibles:</label>
+                    <div id="contenedor-horas" class="grid-horas">
+                        <p style="color: var(--gris-texto); font-size: 0.9rem; font-style: italic;">Por favor, selecciona una fecha primero...</p>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-reserva">Confirmar Mi Turno</button>
+            </form>
+
+            <div id="pantalla-seguimiento" class="tracking-contenedor ocultar-tracking"></div>
+
+        </div>
     </section>
 
     <script type="module" src="assets/main.js"></script>
