@@ -2,7 +2,7 @@ export function procesarCita(evento) {
     evento.preventDefault(); 
 
     // CONFIGURA TU WHATSAPP REAL AQUÍ
-    const TU_TELEFONO = "8292466177"; 
+    const TU_TELEFONO = "18090000000"; 
 
     const nombre = document.getElementById('nombre').value.trim();
     const email = document.getElementById('email').value.trim();
@@ -32,11 +32,13 @@ export function procesarCita(evento) {
 
     const urlWhatsApp = `https://wa.me/${TU_TELEFONO}?text=${mensajeWhatsApp}`;
     
-    // Abrir la API de WhatsApp
-    window.open(urlWhatsApp, '_blank');
-
-    // Iniciar el sistema de rastreo en tiempo real
+    // Iniciar el sistema de rastreo en la web PRIMERO para que se dibuje antes de salir
     activarPantallaSeguimiento({ nombre, servicio, barbero, hora, fecha: fechaFormateada });
+
+    // Abrir la API de WhatsApp con un mini retraso para asegurar que la web cargue el tracking detrás
+    setTimeout(() => {
+        window.open(urlWhatsApp, '_blank');
+    }, 100);
 
     evento.target.reset();
 }
@@ -84,10 +86,18 @@ function activarPantallaSeguimiento(datos) {
                 </div>
             </div>
 
-            <p class="nota-footer">No cierres esta pestaña para mantener el monitoreo en vivo.</p>
+            <button id="btn-regresar-formulario" class="btn-reserva" style="margin-top: 25px; width: 100%; font-size: 0.9rem; padding: 12px; animation: none;">
+                <i class="fas fa-arrow-left"></i> Volver / Nueva Cita
+            </button>
+
+            <p class="nota-footer" style="margin-top: 15px;">No cierres esta pestaña para mantener el monitoreo en vivo.</p>
         `;
 
         contenedorTracking.classList.remove('ocultar-tracking');
+        
+        // Configurar la acción del nuevo botón de regreso
+        document.getElementById('btn-regresar-formulario').addEventListener('click', restaurarFormulario);
+        
         simularAvanceUber();
     }, 400);
 }
@@ -108,9 +118,35 @@ function simularAvanceUber() {
         if(barra && paso3) {
             barra.style.height = '100%';
             paso3.classList.add('activo-nodo');
-            document.querySelector('.tracking-header p').innerHTML = "✨ ¡Turno Verificado con Éxito! Te esperamos.";
-            document.querySelector('.radar-ping').style.animation = "none";
-            document.querySelector('.radar-ping').style.backgroundColor = "#c5a059";
+            const textoHeader = document.querySelector('.tracking-header p');
+            if (textoHeader) textoHeader.innerHTML = "✨ ¡Turno Verificado con Éxito! Te esperamos.";
+            
+            const radar = document.querySelector('.radar-ping');
+            if (radar) {
+                radar.style.animation = "none";
+                radar.style.backgroundColor = "#c5a059";
+            }
         }
     }, 9000);
+}
+
+// Función encargada de limpiar los estados y regresar al diseño original
+function restaurarFormulario() {
+    const formulario = document.getElementById('form-reservas');
+    const contenedorTracking = document.getElementById('pantalla-seguimiento');
+    
+    // Resetear valores de control en la memoria de la página
+    document.getElementById('barbero-seleccionado').value = "";
+    document.getElementById('hora-seleccionada').value = "";
+    document.getElementById('contenedor-horas').innerHTML = `<p style="color: var(--gris-texto); font-size: 0.9rem; font-style: italic;">Por favor, selecciona una fecha primero...</p>`;
+    
+    // Quitar la selección visual de los barberos
+    document.querySelectorAll('.card-barbero').forEach(t => t.classList.remove('barbero-activo'));
+
+    // Intercambio visual suave
+    contenedorTracking.classList.add('ocultar-tracking');
+    formulario.style.display = 'flex';
+    setTimeout(() => {
+        formulario.style.opacity = '1';
+    }, 50);
 }
