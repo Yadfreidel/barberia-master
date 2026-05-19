@@ -80,6 +80,7 @@ function inicializarPagina() {
 
     configurarFiltros();
     configurarAccesosAccesoAdmin();
+    configurarEfectosPremiumInteractivos();
 
     const botonesElegir = document.querySelectorAll('.btn-card-reserva');
     botonesElegir.forEach(boton => {
@@ -169,6 +170,50 @@ function configurarAccesosAccesoAdmin() {
 
     if (btnCerrarDash) btnCerrarDash.addEventListener('click', cerrarDashboard);
     if (btnResetDatos) btnResetDatos.addEventListener('click', resetearEstadisticas);
+}
+
+// NUEVOS EFECTOS TOP: MANEJO INTELIGENTE RESPONSIVE PC / TÁCTIL
+function configurarEfectosPremiumInteractivos() {
+    // 1. Inclinación 3D para Servicios (Solo Escritorio para evitar tirones en móvil)
+    if (!window.matchMedia("(max-width: 768px)").matches) {
+        document.addEventListener('mousemove', (e) => {
+            const tarjetas = document.querySelectorAll('.card-servicio');
+            tarjetas.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                    const x = e.clientX - rect.left - (rect.width / 2);
+                    const y = e.clientY - rect.top - (rect.height / 2);
+                    card.style.transform = `translateY(-8px) rotateX(${-y / 15}deg) rotateY(${x / 15}deg)`;
+                    
+                    const tagPrecio = card.querySelector('.precio-tag');
+                    if(tagPrecio) tagPrecio.style.transform = 'translateZ(30px)';
+                }
+            });
+        });
+
+        document.addEventListener('mouseout', () => {
+            document.querySelectorAll('.card-servicio').forEach(card => {
+                card.style.transform = 'translateY(0) rotateX(0) rotateY(0)';
+                const tagPrecio = card.querySelector('.precio-tag');
+                if(tagPrecio) tagPrecio.style.transform = 'translateZ(0)';
+            });
+        });
+    }
+
+    // 2. Control de Gestos Táctiles Ergonómicos para el Staff en Teléfonos
+    const tarjetasBarberos = document.querySelectorAll('.card-barbero');
+    tarjetasBarberos.forEach(tarjeta => {
+        tarjeta.addEventListener('touchstart', () => {
+            tarjetasBarberos.forEach(t => t.classList.remove('touch-active'));
+            tarjeta.classList.add('touch-active');
+        }, { passive: true });
+    });
+
+    document.addEventListener('touchstart', (e) => {
+        if (!e.target.closest('.card-barbero')) {
+            tarjetasBarberos.forEach(t => t.classList.remove('touch-active'));
+        }
+    }, { passive: true });
 }
 
 if (formulario) formulario.addEventListener('submit', procesarCita);
