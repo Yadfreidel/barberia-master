@@ -106,24 +106,16 @@ nav ul li a:hover { color: var(--dorado); }
 nav ul li a:hover::after { width: 100%; }
 
 /* ==========================================
-   SECCIÓN HERO
+   SECCIÓN HERO (CORREGIDA CON TU IMAGEN barbero-principal.jpg.jpeg)
    ========================================== */
-.hero {
+.hero-section {
     height: 75vh; position: relative; overflow: hidden;
-    display: flex; justify-content: center; align-items: center; text-align: center;
+    display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+    border-bottom: 1px solid rgba(197, 160, 89, 0.15);
 }
-.hero-bg-live {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.85)), 
-                url('https://images.unsplash.com/photo-1512864084360-7c0c4d0a0845?q=80&w=1600&auto=format&fit=crop') no-repeat center center/cover;
-    z-index: 1; animation: livePhoto 18s infinite ease-in-out;
-}
-.hero::after {
-    content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 150px;
-    background: linear-gradient(to top, var(--negro-fondo), transparent); z-index: 2;
-}
+
 .hero-content { position: relative; z-index: 3; padding: 0 20px; animation: fadeInUp 1.2s ease forwards; }
-.hero-content h2 { font-size: 3.5rem; letter-spacing: 4px; margin-bottom: 15px; font-weight: 900; }
+.hero-content h2 { font-size: 3.5rem; letter-spacing: 4px; margin-bottom: 15px; font-weight: 900; text-transform: uppercase; }
 .hero-content p { font-size: 1.2rem; color: var(--gris-texto); margin-bottom: 35px; }
 
 .btn-reserva {
@@ -172,7 +164,7 @@ nav ul li a:hover::after { width: 100%; }
 }
 .card-servicio.ocultar-card { display: none; }
 .card-servicio:hover, .card-servicio:focus-within {
-    border-color: rgba(197, 160, 89, 0.5);
+    border-color: rgba(197, 160, 89, 0.6);
     background: rgba(26, 22, 14, 0.65); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
 }
 .card-imagen-contenedor { width: 100%; height: 200px; overflow: hidden; }
@@ -300,6 +292,7 @@ nav ul li a:hover::after { width: 100%; }
     nav ul li { margin: 0 12px; }
     nav ul li a { font-size: 0.8rem; }
     
+    .hero-section { height: 60vh; /* Portada más corta en móvil */ }
     .hero-content h2 { font-size: 2.2rem; letter-spacing: 2px; }
     .hero-content p { font-size: 1rem; }
     

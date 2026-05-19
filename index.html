@@ -4,133 +4,140 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Barbería Master | Estilo Superior</title>
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="assets/css/styles.css"> 
 </head>
-<body>
+<body style="background-color: #0a0a0a; color: #ffffff; margin: 0; font-family: 'Segoe UI', Roboto, sans-serif;">
 
-    <header>
-        <div class="logo">BARBER<span>SHOP</span></div>
-        <nav>
-            <ul>
-                <li><a href="#">Inicio</a></li>
-                <li><a href="#catalogo-seccion">Catálogo</a></li>
-                <li><a href="#staff-seccion">Equipo</a></li>
-                <li><a href="#contacto">Citas</a></li>
+    <header class="hero-section" style="background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.75)), url('assets/imagenes/barbero-principal.jpg.jpeg') no-repeat center 20%/cover; height: 85vh; display: flex; flex-direction: column; justify-content: space-between; align-items: center; color: white; padding: 30px 20px; box-shadow: inset 0 -50px 100px #0a0a0a;">
+        
+        <nav class="navbar" style="width: 100%; display: flex; justify-content: space-between; align-items: center; max-width: 1200px;">
+            <div class="logo" style="font-weight: 900; font-size: 1.8rem; letter-spacing: 3px; color: #ffffff;">
+                BARBER<span style="color: #c5a059;">SHOP</span>
+            </div>
+            <ul class="nav-links" style="display: flex; list-style: none; gap: 25px; margin: 0; padding: 0;">
+                <li><a href="#inicio" style="color: #ffffff; text-decoration: none; font-weight: 600; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">Inicio</a></li>
+                <li><a href="#catalogo-seccion" style="color: #ffffff; text-decoration: none; font-weight: 600; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">Catálogo</a></li>
+                <li><a href="#staff-seccion" style="color: #ffffff; text-decoration: none; font-weight: 600; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">Equipo</a></li>
+                <li><a href="#contacto" style="color: #ffffff; text-decoration: none; font-weight: 600; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">Citas</a></li>
             </ul>
         </nav>
+        
+        <div class="hero-content" style="margin-top: auto; margin-bottom: auto; text-align: center; max-width: 750px; animation: fadeInUp 1s ease;">
+            <h1 style="font-size: 3.8rem; font-weight: 900; letter-spacing: 5px; margin-bottom: 10px; color: #ffffff; text-shadow: 0 4px 15px rgba(0,0,0,0.8); text-transform: uppercase;">
+                ESTILO SUPERIOR
+            </h1>
+            <p style="font-size: 1.25rem; margin-bottom: 35px; color: #e0e0e0; text-shadow: 0 2px 8px rgba(0,0,0,0.9); font-weight: 400; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Cortes de autor, mantenimientos de barba y combos VIP con la mejor experiencia en RD$.
+            </p>
+            
+            <a href="#contacto" class="btn-primary" style="display: inline-block; background-color: #c5a059; color: #0a0a0a; padding: 16px 40px; text-decoration: none; font-weight: 800; border-radius: 4px; text-transform: uppercase; letter-spacing: 2px; font-size: 0.95rem; box-shadow: 0 8px 25px rgba(197, 160, 89, 0.4); border: 2px solid #c5a059; transition: all 0.3s ease;">
+                Confirmar Mi Turno
+            </a>
+        </div>
+        
+        <div></div>
     </header>
 
-    <section class="hero">
-        <div class="hero-bg-live"></div>
-        <div class="hero-content">
-            <h2>MÁS QUE UN CORTE, <br> ES UNA EXPERIENCIA.</h2>
-            <p>Especialistas en barbería clásica y tendencias modernas.</p>
-            <a href="#contacto" class="btn-reserva">RESERVAR EN LÍNEA</a>
-        </div>
-    </section>
+    <section id="catalogo-seccion" style="padding: 80px 20px; text-align: center; background-color: #0a0a0a;">
+        <h2 class="seccion-titulo" style="font-size: 2.5rem; color: #c5a059; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px; font-weight: 800;">Nuestros Servicios</h2>
+        <p class="seccion-subtitulo" style="color: #a0a0a0; font-size: 1.1rem; margin-bottom: 40px;">Seleccionados minuciosamente para el caballero exigente</p>
 
-    <section id="catalogo-seccion">
-        <h2 class="seccion-titulo">Nuestros Servicios</h2>
-        <p class="seccion-subtitulo">Seleccionados minuciosamente para el caballero exigente</p>
-
-        <div class="filtros-contenedor">
-            <button class="btn-filtro activo" data-categoria="todos">Ver Todo</button>
-            <button class="btn-filtro" data-categoria="cortes"><i class="fas fa-scissors"></i> Cortes</button>
-            <button class="btn-filtro" data-categoria="barba"><i class="fas fa-razor"></i> Barba & SPA</button>
-            <button class="btn-filtro" data-categoria="combos"><i class="fas fa-gem"></i> Combos VIP</button>
+        <div class="filtros-contenedor" style="display: flex; gap: 15px; justify-content: center; margin-bottom: 50px; flex-wrap: wrap;">
+            <button class="btn-filtro activo" data-categoria="todos" style="padding: 12px 25px; background-color: #c5a059; color: #0a0a0a; border: none; border-radius: 30px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">Ver Todo</button>
+            <button class="btn-filtro" data-categoria="cortes" style="padding: 12px 25px; background-color: #141414; color: #ffffff; border: 1px solid #222; border-radius: 30px; font-weight: 600; cursor: pointer; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;"><i class="fas fa-scissors"></i> Cortes</button>
+            <button class="btn-filtro" data-categoria="barba" style="padding: 12px 25px; background-color: #141414; color: #ffffff; border: 1px solid #222; border-radius: 30px; font-weight: 600; cursor: pointer; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;"><i class="fas fa-razor"></i> Barba & SPA</button>
+            <button class="btn-filtro" data-categoria="combos" style="padding: 12px 25px; background-color: #141414; color: #ffffff; border: 1px solid #222; border-radius: 30px; font-weight: 600; cursor: pointer; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;"><i class="fas fa-gem"></i> Combos VIP</button>
         </div>
 
-        <div id="grid-dinamico-servicios" class="grid-servicios"></div>
+        <div id="grid-dinamico-servicios" class="grid-servicios" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;"></div>
     </section>
 
-    <section id="staff-seccion">
-        <h2 class="seccion-titulo">Elige a tu Profesional</h2>
-        <p class="seccion-subtitulo">Cada uno cuenta con un estilo único respaldado por años de experiencia</p>
-        
-        <div id="grid-dinamico-staff" class="grid-staff"></div>
+    <section id="staff-seccion" style="padding: 80px 20px; text-align: center; background-color: #0d0d0d;">
+        <h2 class="seccion-titulo" style="font-size: 2.5rem; color: #c5a059; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px; font-weight: 800;">Elige a tu Profesional</h2>
+        <p class="seccion-subtitulo" style="color: #a0a0a0; font-size: 1.1rem; margin-bottom: 40px;">Cada uno cuenta con un estilo único respaldado por años de experiencia</p>
+        <div id="grid-dinamico-staff" class="grid-staff" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; max-width: 1100px; margin: 0 auto;"></div>
     </section>
 
-    <section id="contacto">
-        <div class="contenedor-dinamico-contacto">
-            
-            <form class="formulario-citas" id="form-reservas">
-                <h2 class="seccion-titulo" style="font-size: 1.8rem; margin-bottom: 5px;">Agenda tu Cita Elite</h2>
-                <p class="seccion-subtitulo" style="margin-bottom: 25px; font-size: 0.9rem;">Completa tus datos para procesar el turno</p>
+    <section id="contacto" style="padding: 80px 20px; display: flex; justify-content: center; background-color: #0a0a0a;">
+        <div class="contenedor-dinamico-contacto" style="width: 100%; max-width: 550px;">
+            <form class="formulario-citas" id="form-reservas" style="background: #141414; border: 1px solid rgba(255, 255, 255, 0.05); padding: 40px; border-radius: 12px; display: flex; flex-direction: column; gap: 20px;">
+                <h2 style="font-size: 1.8rem; color: #c5a059; text-transform: uppercase; text-align: center; margin-bottom: 5px; font-weight: 700;">Agenda tu Cita Elite</h2>
+                <p style="color: #a0a0a0; text-align: center; margin-bottom: 15px; font-size: 0.9rem;">Completa tus datos para procesar el turno</p>
                 
                 <input type="hidden" id="barbero-seleccionado" value="" required>
                 <input type="hidden" id="hora-seleccionada" value="" required>
 
-                <input type="text" id="nombre" placeholder="Nombre Completo" required>
-                <input type="email" id="email" placeholder="Correo Electrónico" required>
-                <input type="tel" id="telefono" placeholder="Teléfono de Contacto" required>
+                <input type="text" id="nombre" placeholder="Nombre Completo" required style="padding: 14px; background-color: #0a0a0a; border: 1px solid #222; color: #fff; font-size: 1rem; border-radius: 4px;">
+                <input type="email" id="email" placeholder="Correo Electrónico" required style="padding: 14px; background-color: #0a0a0a; border: 1px solid #222; color: #fff; font-size: 1rem; border-radius: 4px;">
+                <input type="tel" id="telefono" placeholder="Teléfono de Contacto" required style="padding: 14px; background-color: #0a0a0a; border: 1px solid #222; color: #fff; font-size: 1rem; border-radius: 4px;">
                 
-                <label for="servicio-select" style="color: #c5a059; font-weight: bold; margin-bottom: -10px; font-size: 0.9rem;">Servicio Solicitado:</label>
-                <select id="servicio-select" required>
+                <label for="servicio-select" style="color: #c5a059; font-weight: bold; font-size: 0.9rem; margin-bottom: -5px;">Servicio Solicitado:</label>
+                <select id="servicio-select" required style="padding: 14px; background-color: #0a0a0a; border: 1px solid #222; color: #fff; font-size: 1rem; border-radius: 4px;">
                     <option value="" disabled selected>-- Elige un corte del catálogo --</option>
                 </select>
 
-                <div class="calendario-contenedor">
-                    <label for="fecha" style="color: #c5a059; font-weight: bold; font-size: 0.9rem;">1. Selecciona el Día:</label>
-                    <input type="date" id="fecha" required>
+                <div class="calendario-contenedor" style="background-color: #0a0a0a; padding: 20px; border-radius: 6px; border: 1px solid #222;">
+                    <label for="fecha" style="color: #c5a059; font-weight: bold; font-size: 0.9rem; display: block; margin-bottom: 8px;">1. Selecciona el Día:</label>
+                    <input type="date" id="fecha" required style="padding: 10px; background-color: #141414; border: 1px solid #222; color: #fff; width: 100%; border-radius: 4px;">
                     
-                    <label style="color: #c5a059; font-weight: bold; font-size: 0.9rem; margin-top: 15px; display: block;">2. Horas Disponibles:</label>
-                    <div id="contenedor-horas" class="grid-horas">
-                        <p style="color: var(--gris-texto); font-size: 0.9rem; font-style: italic;">Por favor, selecciona una fecha primero...</p>
+                    <label style="color: #c5a059; font-weight: bold; font-size: 0.9rem; margin-top: 15px; display: block; margin-bottom: 8px;">2. Horas Disponibles:</label>
+                    <div id="contenedor-horas" class="grid-horas" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 10px;">
+                        <p style="color: #a0a0a0; font-size: 0.9rem; font-style: italic;">Por favor, selecciona una fecha primero...</p>
                     </div>
                 </div>
 
-                <button type="submit" class="btn-reserva">Confirmar Mi Turno</button>
+                <button type="submit" style="padding: 16px; background-color: #c5a059; color: #0a0a0a; border: none; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-radius: 4px; cursor: pointer; font-size: 1rem; transition: background 0.2s;">Confirmar Mi Turno</button>
             </form>
 
             <div id="pantalla-seguimiento" class="tracking-contenedor ocultar-tracking"></div>
-
         </div>
     </section>
 
-    <button id="btn-flotante-admin" class="btn-admin-flotante" title="Panel de Administración">
+    <button id="btn-flotante-admin" class="btn-admin-flotante" title="Panel de Administración" style="position: fixed; bottom: 20px; left: 20px; width: 45px; height: 45px; background-color: rgba(20, 20, 20, 0.85); border: 1px solid #c5a059; border-radius: 50%; color: #c5a059; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 4000;">
         <i class="fas fa-user-shield"></i>
     </button>
 
-    <div id="dashboard-admin" class="modal-dashboard ocultar-dashboard">
-        <div class="dashboard-contenido">
-            <div class="dashboard-header">
-                <h2><i class="fas fa-chart-line"></i> Panel de Control BarberShop</h2>
-                <button id="btn-cerrar-dashboard" class="btn-cerrar">&times;</button>
+    <div id="dashboard-admin" class="modal-dashboard ocultar-dashboard" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.9); z-index: 5000; display: none; justify-content: center; align-items: center; padding: 20px;">
+        <div class="dashboard-contenido" style="background-color: #141414; border: 1px solid #c5a059; border-radius: 12px; width: 100%; max-width: 600px; padding: 30px; display: flex; flex-direction: column; gap: 20px;">
+            <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding-bottom: 15px;">
+                <h2 style="color: #ffffff; font-size: 1.5rem; margin: 0;"><i class="fas fa-chart-line"></i> Panel de Control BarberShop</h2>
+                <button id="btn-cerrar-dashboard" class="btn-cerrar" style="background: transparent; border: none; color: #a0a0a0; font-size: 2rem; cursor: pointer;">&times;</button>
             </div>
             
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <div class="metric-icon"><i class="fas fa-calendar-check"></i></div>
+            <div class="metrics-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="metric-card" style="background-color: #0a0a0a; border: 1px solid #222; border-radius: 8px; padding: 20px; display: flex; align-items: center; gap: 15px;">
+                    <div class="metric-icon" style="color: #c5a059; font-size: 1.8rem;"><i class="fas fa-calendar-check"></i></div>
                     <div class="metric-info">
-                        <h3 id="dash-total-citas">0</h3>
-                        <p>Citas Registradas</p>
+                        <h3 id="dash-total-citas" style="margin: 0; font-size: 1.6rem; color: #fff;">0</h3>
+                        <p style="margin: 0; color: #a0a0a0; font-size: 0.9rem;">Citas Registradas</p>
                     </div>
                 </div>
-                <div class="metric-card ganancias">
-                    <div class="metric-icon"><i class="fas fa-dollar-sign"></i></div>
+                <div class="metric-card ganancias" style="background-color: #0a0a0a; border: 1px solid #222; border-radius: 8px; padding: 20px; display: flex; align-items: center; gap: 15px;">
+                    <div class="metric-icon" style="color: #00ff66; font-size: 1.8rem;"><i class="fas fa-dollar-sign"></i></div>
                     <div class="metric-info">
-                        <h3 id="dash-total-ingresos">$0.00</h3>
-                        <p>Ingresos Estimados</p>
+                        <h3 id="dash-total-ingresos" style="margin: 0; font-size: 1.6rem; color: #fff;">$0.00</h3>
+                        <p style="margin: 0; color: #a0a0a0; font-size: 0.9rem;">Ingresos Estimados</p>
                     </div>
                 </div>
             </div>
 
-            <div class="details-grid">
-                <div class="detail-box">
-                    <h4><i class="fas fa-star"></i> Servicio Estrella</h4>
-                    <p id="dash-servicio-top">Ninguno aún</p>
-                    <span id="dash-servicio-cant" class="badge">0 ventas</span>
+            <div class="details-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="detail-box" style="background-color: #0a0a0a; border: 1px solid #222; border-radius: 6px; padding: 15px;">
+                    <h4 style="color: #c5a059; margin-top: 0; margin-bottom: 5px;"><i class="fas fa-star"></i> Servicio Estrella</h4>
+                    <p id="dash-servicio-top" style="margin: 0; color: #fff; font-weight: 600;">Ninguno aún</p>
+                    <span id="dash-servicio-cant" class="badge" style="background-color: rgba(197, 160, 89, 0.15); color: #c5a059; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; display: inline-block; margin-top: 5px;">0 ventas</span>
                 </div>
-                <div class="detail-box">
-                    <h4><i class="fas fa-user-crown"></i> Barbero Destacado</h4>
-                    <p id="dash-barbero-top">Ninguno aún</p>
-                    <span id="dash-barbero-cant" class="badge">0 citas</span>
+                <div class="detail-box" style="background-color: #0a0a0a; border: 1px solid #222; border-radius: 6px; padding: 15px;">
+                    <h4 style="color: #c5a059; margin-top: 0; margin-bottom: 5px;"><i class="fas fa-user-crown"></i> Barbero Destacado</h4>
+                    <p id="dash-barbero-top" style="margin: 0; color: #fff; font-weight: 600;">Ninguno aún</p>
+                    <span id="dash-barbero-cant" class="badge" style="background-color: rgba(197, 160, 89, 0.15); color: #c5a059; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; display: inline-block; margin-top: 5px;">0 citas</span>
                 </div>
             </div>
 
-            <button id="btn-reset-datos" class="btn-danger"><i class="fas fa-trash-alt"></i> Reiniciar Estadísticas</button>
+            <button id="btn-reset-datos" class="btn-danger" style="padding: 12px; background-color: #2a1012; color: #e74c3c; border: 1px solid #4a1a1d; border-radius: 6px; cursor: pointer; text-transform: uppercase; width: 100%; font-weight: bold;">\Reiniciar Estadísticas</button>
         </div>
     </div>
 
