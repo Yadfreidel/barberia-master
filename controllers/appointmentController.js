@@ -1,9 +1,9 @@
-import { serviciosBarberia } from '../models/serviceModel.js';
+import { obtenerServicios } from '../models/serviceModel.js';
 
 export function procesarCita(evento) {
-    evento.preventDefault(); 
+    evento.preventDefault();
 
-    const TU_TELEFONO = "8292466177"; 
+    const TU_TELEFONO = "8292466177";
 
     const nombre = document.getElementById('nombre').value.trim();
     const email = document.getElementById('email').value.trim();
@@ -13,16 +13,17 @@ export function procesarCita(evento) {
     const fecha = document.getElementById('fecha').value;
     const hora = document.getElementById('hora-seleccionada').value;
 
-    if (!servicio) { alert("Por favor, selecciona un servicio del catálogo."); return; }
-    if (!barbero) { alert("Por favor, selecciona tu barbero en la sección de arriba."); return; }
-    if (!hora) { alert("Por favor, toca una de las horas disponibles."); return; }
+    if (!servicio) { mostrarAlerta("Por favor, selecciona un servicio del catálogo."); return; }
+    if (!barbero) { mostrarAlerta("Por favor, selecciona tu barbero en la sección de arriba."); return; }
+    if (!fecha) { mostrarAlerta("Por favor, selecciona una fecha para tu cita."); return; }
+    if (!hora) { mostrarAlerta("Por favor, toca una de las horas disponibles."); return; }
 
     const fechaFormateada = fecha.split('-').reverse().join('/');
 
-    // Buscar el objeto servicio para capturar su precio real
-    const objetoServicio = serviciosBarberia.find(s => s.nombre === servicio) || { precio: "$0.00" };
+    const serviciosActuales = obtenerServicios();
+    const objetoServicio = serviciosActuales.find(s => s.nombre === servicio) || { precio: "$0.00" };
 
-    // GUARDAR EN MEMORIA PARA LAS ESTADÍSTICAS DEL DUEÑO
+    // Guardar en analytics
     guardarMetricasAnaliticas({
         servicio: servicio,
         precio: objetoServicio.precio,
@@ -30,7 +31,7 @@ export function procesarCita(evento) {
         fecha: fechaFormateada
     });
 
-    const mensajeWhatsApp = 
+    const mensajeWhatsApp =
         `🔥 *NUEVA RESERVA PREMIUM* 🔥%0A%0A` +
         `👤 *Cliente:* ${nombre}%0A` +
         `📞 *Teléfono:* ${telefonoCliente}%0A%0A` +
@@ -38,18 +39,38 @@ export function procesarCita(evento) {
         `💈 *Barbero:* _${barbero}_%0A` +
         `📅 *Fecha:* ${fechaFormateada}%0A` +
         `⏰ *Hora:* *${hora} hrs*%0A%0A` +
-        `⚡ _Turno enviado. Abriendo panel de seguimiento en la web..._`;
+        `⚡ _Turno enviado desde la web._`;
 
     const urlWhatsApp = `https://wa.me/${TU_TELEFONO}?text=${mensajeWhatsApp}`;
-    
-    // Iniciar el tracking en la web
+
     activarPantallaSeguimiento({ nombre, servicio, barbero, hora, fecha: fechaFormateada, precio: objetoServicio.precio });
 
     setTimeout(() => {
         window.open(urlWhatsApp, '_blank');
     }, 100);
 
+    // Resetear form y campos hidden
     evento.target.reset();
+    document.getElementById('barbero-seleccionado').value = '';
+    document.getElementById('hora-seleccionada').value = '';
+}
+
+function mostrarAlerta(mensaje) {
+    const existente = document.querySelector('.alerta-cita');
+    if (existente) existente.remove();
+
+    const alerta = document.createElement('div');
+    alerta.className = 'alerta-cita';
+    alerta.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${mensaje}`;
+    
+    const form = document.getElementById('form-reservas');
+    form.insertBefore(alerta, form.querySelector('button[type="submit"]'));
+    
+    setTimeout(() => alerta.classList.add('alerta-visible'), 10);
+    setTimeout(() => {
+        alerta.classList.remove('alerta-visible');
+        setTimeout(() => alerta.remove(), 300);
+    }, 3000);
 }
 
 function guardarMetricasAnaliticas(nuevaCita) {
@@ -63,10 +84,10 @@ function activarPantallaSeguimiento(datos) {
     const contenedorTracking = document.getElementById('pantalla-seguimiento');
 
     formulario.style.opacity = '0';
-    
+
     setTimeout(() => {
         formulario.style.display = 'none';
-        
+
         contenedorTracking.innerHTML = `
             <div class="tracking-header">
                 <div class="radar-ping"></div>
@@ -84,7 +105,7 @@ function activarPantallaSeguimiento(datos) {
                 <div class="barra-progreso-fondo">
                     <div class="barra-progreso-llena" id="barra-progreso"></div>
                 </div>
-                
+
                 <div class="paso-tracking activo-nodo" id="paso-1">
                     <div class="icono-nodo"><i class="fas fa-paper-plane"></i></div>
                     <div class="texto-nodo"><h4>Solicitada</h4><p>Enviado a WhatsApp</p></div>
@@ -103,17 +124,16 @@ function activarPantallaSeguimiento(datos) {
 
             <div id="contenedor-ticket-wallet" style="display: none;"></div>
 
-            <button id="btn-regresar-formulario" class="btn-reserva" style="margin-top: 25px; width: 100%; font-size: 0.9rem; padding: 12px; animation: none;">
+            <button id="btn-regresar-formulario" class="btn-regresar-form">
                 <i class="fas fa-arrow-left"></i> Volver / Nueva Cita
             </button>
 
-            <p class="nota-footer" style="margin-top: 15px;">No cierres esta pestaña para mantener el monitoreo en vivo.</p>
+            <p class="nota-footer-tracking">No cierres esta pestaña para mantener el monitoreo en vivo.</p>
         `;
 
         contenedorTracking.classList.remove('ocultar-tracking');
         document.getElementById('btn-regresar-formulario').addEventListener('click', restaurarFormulario);
-        
-        // Ejecutamos el avance simulado pasándole todos los datos para armar el QR al final
+
         simularAvanceUber(datos);
     }, 400);
 }
@@ -124,42 +144,40 @@ function simularAvanceUber(datosCita) {
     const paso3 = document.getElementById('paso-3');
 
     setTimeout(() => {
-        if(barra && paso2) {
+        if (barra && paso2) {
             barra.style.height = '50%';
             paso2.classList.add('activo-nodo');
         }
     }, 4500);
 
     setTimeout(() => {
-        if(barra && paso3) {
+        if (barra && paso3) {
             barra.style.height = '100%';
             paso3.classList.add('activo-nodo');
-            
+
             const textoHeader = document.querySelector('.tracking-header p');
             if (textoHeader) textoHeader.innerHTML = "✨ ¡Turno Verificado con Éxito! Te esperamos.";
-            
+
             const radar = document.querySelector('.radar-ping');
             if (radar) {
                 radar.style.animation = "none";
                 radar.style.backgroundColor = "#c5a059";
             }
 
-            // MAGIA PREMIUM: Ocultar barra Uber y pintar el Pase Digital VIP
             setTimeout(() => {
                 const lineaTiempo = document.getElementById('linea-tiempo-uber');
                 const contenedorTicket = document.getElementById('contenedor-ticket-wallet');
-                
+
                 if (lineaTiempo && contenedorTicket) {
                     lineaTiempo.style.display = 'none';
-                    
-                    // Inyectamos la estructura visual del ticket estilo Wallet de Aerolínea
+
                     contenedorTicket.innerHTML = `
                         <div class="ticket-wallet-card">
                             <div class="ticket-wallet-header">
                                 <span>BARBER PASS</span>
                                 <span class="ticket-premium-tag">PREMIUM ACCESS</span>
                             </div>
-                            
+
                             <div class="ticket-wallet-body">
                                 <div class="ticket-row">
                                     <div><label>CLIENTE</label><p>${datosCita.nombre}</p></div>
@@ -170,32 +188,43 @@ function simularAvanceUber(datosCita) {
                                     <div><label>BARBERO</label><p>${datosCita.barbero}</p></div>
                                 </div>
                                 <div class="ticket-row">
-                                    <div><label>TOTAL ESTIMADO</label><p style="color: var(--dorado-brillante); font-weight: bold;">${datosCita.precio}</p></div>
-                                    <div><label>STATUS</label><p style="color: #2ecc71; font-weight: bold;"><i class="fas fa-check-circle"></i> CONFIRMADO</p></div>
+                                    <div><label>TOTAL ESTIMADO</label><p class="ticket-precio">${datosCita.precio}</p></div>
+                                    <div><label>STATUS</label><p class="ticket-confirmado"><i class="fas fa-check-circle"></i> CONFIRMADO</p></div>
                                 </div>
                             </div>
-                            
+
                             <div class="ticket-wallet-qrcode-zone">
                                 <div id="qrcode-canvas"></div>
                                 <p class="ticket-qr-instruction">Muestra este código al llegar a la recepción</p>
                             </div>
                         </div>
                     `;
-                    
+
                     contenedorTicket.style.display = 'block';
 
-                    // CREACIÓN DEL CÓDIGO QR EN TIEMPO REAL CON LOS DATOS DE LA RESERVA
-                    // Este string es el que leerá el celular del barbero cuando lo escanee
+                    // Generar QR si la librería está cargada
                     const stringDatosQR = `CITA CONFIRMADA\nCliente: ${datosCita.nombre}\nServicio: ${datosCita.servicio}\nBarbero: ${datosCita.barbero}\nFecha: ${datosCita.fecha} a las ${datosCita.hora} hrs.\nPrecio: ${datosCita.precio}`;
-                    
-                    new QRCode(document.getElementById("qrcode-canvas"), {
-                        text: stringDatosQR,
-                        width: 140,
-                        height: 140,
-                        colorDark : "#000000",
-                        colorLight : "#ffffff",
-                        correctLevel : QRCode.CorrectLevel.H
-                    });
+
+                    if (typeof QRCode !== 'undefined') {
+                        new QRCode(document.getElementById("qrcode-canvas"), {
+                            text: stringDatosQR,
+                            width: 140,
+                            height: 140,
+                            colorDark: "#000000",
+                            colorLight: "#ffffff",
+                            correctLevel: QRCode.CorrectLevel.H
+                        });
+                    } else {
+                        // Fallback: mostrar datos como texto si QR no carga
+                        const qrDiv = document.getElementById("qrcode-canvas");
+                        if (qrDiv) {
+                            qrDiv.innerHTML = `<div style="padding: 15px; background: #f0f0f0; border-radius: 8px; text-align: center; font-size: 0.8rem; color: #333;">
+                                <i class="fas fa-qrcode" style="font-size: 3rem; color: #999; display: block; margin-bottom: 10px;"></i>
+                                <strong>Datos de tu cita guardados</strong><br>
+                                ${datosCita.servicio} - ${datosCita.fecha}
+                            </div>`;
+                        }
+                    }
                 }
             }, 1500);
         }
@@ -205,11 +234,15 @@ function simularAvanceUber(datosCita) {
 function restaurarFormulario() {
     const formulario = document.getElementById('form-reservas');
     const contenedorTracking = document.getElementById('pantalla-seguimiento');
-    
+
     document.getElementById('barbero-seleccionado').value = "";
     document.getElementById('hora-seleccionada').value = "";
-    document.getElementById('contenedor-horas').innerHTML = `<p style="color: var(--gris-texto); font-size: 0.9rem; font-style: italic;">Por favor, selecciona una fecha primero...</p>`;
     
+    const contenedorHoras = document.getElementById('contenedor-horas');
+    if (contenedorHoras) {
+        contenedorHoras.innerHTML = `<p class="placeholder-horas">Por favor, selecciona una fecha primero...</p>`;
+    }
+
     document.querySelectorAll('.card-barbero').forEach(t => t.classList.remove('barbero-activo'));
 
     contenedorTracking.classList.add('ocultar-tracking');

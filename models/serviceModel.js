@@ -1,7 +1,11 @@
-export const serviciosBarberia = [
-    // ==========================================
-    // CATEGORÍA: CORTES (10 Estilos Diferentes)
-    // ==========================================
+// ==========================================
+// MODELO DE SERVICIOS CON PERSISTENCIA LOCAL
+// ==========================================
+
+const STORAGE_KEY = 'barber_servicios_data';
+
+const serviciosPorDefecto = [
+    // CORTES (10)
     {
         id: "corte-signature",
         nombre: "Corte Signature Master",
@@ -83,9 +87,7 @@ export const serviciosBarberia = [
         imagen: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=600&auto=format&fit=crop"
     },
 
-    // ==========================================
-    // CATEGORÍA: BARBA & SPA (10 Estilos y Mant.)
-    // ==========================================
+    // BARBA & SPA (10)
     {
         id: "barba-hot-towel",
         nombre: "Ritual de Barba Toalla Caliente",
@@ -167,9 +169,7 @@ export const serviciosBarberia = [
         imagen: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=600&auto=format&fit=crop"
     },
 
-    // ==========================================
-    // CATEGORÍA: COMBOS VIP (8 Combos Mínimo)
-    // ==========================================
+    // COMBOS VIP (8)
     {
         id: "combo-ejecutivo",
         nombre: "Combo Ejecutivo Real",
@@ -235,3 +235,49 @@ export const serviciosBarberia = [
         imagen: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop"
     }
 ];
+
+function inicializarServicios() {
+    const guardados = localStorage.getItem(STORAGE_KEY);
+    if (!guardados) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(serviciosPorDefecto));
+        return [...serviciosPorDefecto];
+    }
+    return JSON.parse(guardados);
+}
+
+export function obtenerServicios() {
+    return inicializarServicios();
+}
+
+export function agregarServicio(servicio) {
+    const servicios = obtenerServicios();
+    servicio.id = 'srv-' + Date.now();
+    servicios.push(servicio);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(servicios));
+    return servicios;
+}
+
+export function actualizarServicio(id, datosActualizados) {
+    const servicios = obtenerServicios();
+    const index = servicios.findIndex(s => s.id === id);
+    if (index !== -1) {
+        servicios[index] = { ...servicios[index], ...datosActualizados };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(servicios));
+    }
+    return servicios;
+}
+
+export function eliminarServicio(id) {
+    let servicios = obtenerServicios();
+    servicios = servicios.filter(s => s.id !== id);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(servicios));
+    return servicios;
+}
+
+export function resetearServicios() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(serviciosPorDefecto));
+    return [...serviciosPorDefecto];
+}
+
+// Compatibilidad con import antiguo
+export const serviciosBarberia = obtenerServicios();
