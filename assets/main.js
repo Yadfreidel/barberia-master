@@ -2,6 +2,7 @@ import { obtenerServicios } from '../models/serviceModel.js';
 import { obtenerBarberos } from '../models/barberModel.js';
 import { procesarCita } from '../controllers/appointmentController.js';
 import { verificarAccesoAdmin, cerrarDashboard } from '../controllers/adminController.js';
+import { supabase, estaSupabaseListo } from './supabaseClient.js';
 
 // ==========================================
 // ELEMENTOS DEL DOM
@@ -140,14 +141,54 @@ function renderizarStaff() {
 }
 
 // ==========================================
-// PÍLDORAS DE HORA
+// PÍLDORAS DE HORA (SUPABASE REAL-TIME)
 // ==========================================
-function generarPildorasDeTiempo() {
-    if (!contenedorHoras || !inputFecha.value) return;
+export async function generarPildorasDeTiempo() {
+    if (!contenedorHoras) return;
     contenedorHoras.innerHTML = '';
     inputHora.value = '';
 
+    if (!inputFecha || !inputFecha.value) {
+        contenedorHoras.innerHTML = `<p class="placeholder-horas">Por favor, selecciona una fecha primero...</p>`;
+        return;
+    }
+
     const fechaSeleccionada = inputFecha.value;
+    const barberoNombre = inputBarbero ? inputBarbero.value : '';
+
+    const horasOcupadas = new Set();
+
+    if (estaSupabaseListo() && barberoNombre) {
+        try {
+            // Buscar barbero en Supabase por nombre
+            const { data: barberosData } = await supabase
+                .from('barberos')
+                .select('id')
+                .eq('nombre', barberoNombre)
+                .limit(1);
+
+            if (barberosData && barberosData.length > 0) {
+                const barberoId = barberosData[0].id;
+                // Consultar citas no canceladas para ese barbero y fecha
+                const { data: citasData, error } = await supabase
+                    .from('citas')
+                    .select('hora')
+                    .eq('barbero_id', barberoId)
+                    .eq('fecha', fechaSeleccionada)
+                    .neq('estado', 'cancelada');
+
+                if (citasData && !error) {
+                    citasData.forEach(cita => {
+                        const horaNormal = String(cita.hora).substring(0, 5);
+                        horasOcupadas.add(horaNormal);
+                    });
+                }
+            }
+        } catch (err) {
+            console.error("Error al consultar horarios ocupados:", err);
+        }
+    }
+
     const fechaActualStr = new Date().toISOString().split('T')[0];
     const ahora = new Date();
     const horaActual = ahora.getHours();
@@ -159,9 +200,19 @@ function generarPildorasDeTiempo() {
         pildora.textContent = horaTexto;
         const [horaBloque] = horaTexto.split(':').map(Number);
 
+        let esPasado = false;
         if (fechaSeleccionada === fechaActualStr) {
             if (horaBloque < horaActual || (horaBloque === horaActual && minutosActuales > 0)) {
-                pildora.classList.add('deshabilitada');
+                esPasado = true;
+            }
+        }
+
+        const estaOcupada = horasOcupadas.has(horaTexto);
+
+        if (esPasado || estaOcupada) {
+            pildora.classList.add('deshabilitada');
+            if (estaOcupada) {
+                pildora.title = "Horario reservado por otro cliente";
             }
         }
 
@@ -176,6 +227,9 @@ function generarPildorasDeTiempo() {
     });
 }
 
+// Exponer globalmente para refrescar tras choques de reservas
+window.generarPildorasDeTiempo = generarPildorasDeTiempo;
+
 // ==========================================
 // SELECCIÓN DE BARBERO
 // ==========================================
@@ -188,6 +242,10 @@ function configurarSeleccionBarberos() {
                 tarjetasBarberos.forEach(t => t.classList.remove('barbero-activo'));
                 tarjeta.classList.add('barbero-activo');
                 inputBarbero.value = e.target.getAttribute('data-nombre');
+                
+                // Refrescar horarios si la fecha ya está seleccionada
+                generarPildorasDeTiempo();
+
                 const contacto = document.getElementById('contacto');
                 if (contacto) contacto.scrollIntoView({ behavior: 'smooth' });
             });

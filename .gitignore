@@ -1,0 +1,7 @@
+# Archivos de configuración con credenciales privadas
+assets/config.js
+
+# Node modules / Logs
+node_modules/
+*.log
+.DS_Store

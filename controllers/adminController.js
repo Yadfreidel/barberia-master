@@ -5,9 +5,10 @@
 
 import { obtenerServicios, agregarServicio, actualizarServicio, eliminarServicio, resetearServicios } from '../models/serviceModel.js';
 import { obtenerBarberos, agregarBarbero, actualizarBarbero, eliminarBarbero, resetearBarberos } from '../models/barberModel.js';
+import { supabase, estaSupabaseListo } from '../assets/supabaseClient.js';
 
 const CONTRASENA_MAESTRA = "yafre15";
-let tabActiva = 'stats';
+let tabActiva = 'citas';
 
 export function verificarAccesoAdmin() {
     const passwordInput = prompt("🔑 Ingrese la clave de administrador:");
@@ -65,6 +66,9 @@ function renderizarDashboardCompleto() {
         </div>
 
         <div class="admin-tabs">
+            <button class="admin-tab ${tabActiva === 'citas' ? 'tab-activa' : ''}" data-tab="citas">
+                <i class="fas fa-calendar-alt"></i> <span>Citas</span>
+            </button>
             <button class="admin-tab ${tabActiva === 'stats' ? 'tab-activa' : ''}" data-tab="stats">
                 <i class="fas fa-chart-line"></i> <span>Stats</span>
             </button>
@@ -91,7 +95,8 @@ function renderizarDashboardCompleto() {
 
     // Renderizar contenido de tab activa
     const body = contenido.querySelector('#admin-tab-body');
-    if (tabActiva === 'stats') renderTabStats(body);
+    if (tabActiva === 'citas') renderTabCitas(body);
+    else if (tabActiva === 'stats') renderTabStats(body);
     else if (tabActiva === 'servicios') renderTabServicios(body);
     else if (tabActiva === 'barberos') renderTabBarberos(body);
 }
@@ -512,5 +517,200 @@ export function resetearEstadisticas() {
     if (confirm("⚠️ ¿Borrar todas las estadísticas?")) {
         localStorage.removeItem('barber_analytics_citas');
         mostrarNotificacion('Datos reseteados', 'success');
+    }
+}
+
+// ==========================================
+// TAB: HISTORIAL DE CITAS (SUPABASE)
+// ==========================================
+async function renderTabCitas(container) {
+    if (!estaSupabaseListo()) {
+        container.innerHTML = `
+            <div class="admin-section-header">
+                <h3><i class="fas fa-calendar-alt"></i> Historial de Citas</h3>
+            </div>
+            <div class="admin-aviso-config">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p><strong>Supabase aún no está configurado.</strong></p>
+                <p>Por favor, edita <code>assets/config.js</code> colocando tu URL y ANON KEY para consultar y actualizar el historial en tiempo real.</p>
+            </div>
+        `;
+        return;
+    }
+
+    let barberosOpciones = [];
+    try {
+        const { data: barberosData } = await supabase.from('barberos').select('id, nombre');
+        if (barberosData) barberosOpciones = barberosData;
+    } catch (e) {
+        console.error("Error al cargar barberos para filtro:", e);
+    }
+
+    container.innerHTML = `
+        <div class="admin-section-header">
+            <h3><i class="fas fa-calendar-alt"></i> Historial de Citas (${barberosOpciones.length ? 'En Línea' : 'Supabase'})</h3>
+            <button id="btn-refrescar-citas" class="btn-admin-accion">
+                <i class="fas fa-sync-alt"></i> Refrescar
+            </button>
+        </div>
+
+        <div class="admin-filtros-citas">
+            <div class="filtro-item">
+                <label><i class="fas fa-user-tie"></i> Barbero:</label>
+                <select id="filtro-citas-barbero">
+                    <option value="">-- Todos los barberos --</option>
+                    ${barberosOpciones.map(b => `<option value="${b.id}">${b.nombre}</option>`).join('')}
+                </select>
+            </div>
+            <div class="filtro-item">
+                <label><i class="fas fa-calendar"></i> Desde:</label>
+                <input type="date" id="filtro-citas-desde">
+            </div>
+            <div class="filtro-item">
+                <label><i class="fas fa-calendar"></i> Hasta:</label>
+                <input type="date" id="filtro-citas-hasta">
+            </div>
+            <button id="btn-aplicar-filtros-citas" class="btn-admin-filtrar">
+                <i class="fas fa-filter"></i> Filtrar
+            </button>
+        </div>
+
+        <div class="tabla-contenedor-responsive">
+            <table class="tabla-admin-citas">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Teléfono</th>
+                        <th>Servicio</th>
+                        <th>Barbero</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-citas-body">
+                    <tr><td colspan="8" class="cargando-td"><i class="fas fa-spinner fa-spin"></i> Cargando citas...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    `;
+
+    const cargarCitas = async () => {
+        const tbody = container.querySelector('#tabla-citas-body');
+        if (!tbody) return;
+
+        tbody.innerHTML = '<tr><td colspan="8" class="cargando-td"><i class="fas fa-spinner fa-spin"></i> Cargando citas...</td></tr>';
+
+        const barberoId = container.querySelector('#filtro-citas-barbero').value;
+        const fechaDesde = container.querySelector('#filtro-citas-desde').value;
+        const fechaHasta = container.querySelector('#filtro-citas-hasta').value;
+
+        try {
+            let query = supabase
+                .from('citas')
+                .select(`
+                    id,
+                    nombre_cliente,
+                    telefono_cliente,
+                    email,
+                    fecha,
+                    hora,
+                    estado,
+                    creado_en,
+                    barberos ( id, nombre ),
+                    servicios ( id, nombre, precio )
+                `)
+                .order('fecha', { ascending: false })
+                .order('hora', { ascending: false });
+
+            if (barberoId) query = query.eq('barbero_id', barberoId);
+            if (fechaDesde) query = query.gte('fecha', fechaDesde);
+            if (fechaHasta) query = query.lte('fecha', fechaHasta);
+
+            const { data: citas, error } = await query;
+
+            if (error) {
+                tbody.innerHTML = `<tr><td colspan="8" class="error-td">Error al cargar citas: ${error.message}</td></tr>`;
+                return;
+            }
+
+            if (!citas || citas.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="vacio-td">No se encontraron citas registradas</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = citas.map(c => {
+                const nombreBarbero = c.barberos ? c.barberos.nombre : 'No especificado';
+                const nombreServicio = c.servicios ? c.servicios.nombre : 'No especificado';
+                const horaFormat = String(c.hora).substring(0, 5);
+
+                const badgeClass = c.estado === 'confirmada' ? 'badge-confirmada' : c.estado === 'cancelada' ? 'badge-cancelada' : 'badge-pendiente';
+
+                return `
+                    <tr>
+                        <td>
+                            <strong>${c.nombre_cliente}</strong><br>
+                            <small class="subtext-email">${c.email || ''}</small>
+                        </td>
+                        <td><a href="tel:${c.telefono_cliente}" class="link-tel">${c.telefono_cliente}</a></td>
+                        <td>${nombreServicio}</td>
+                        <td>${nombreBarbero}</td>
+                        <td>${c.fecha}</td>
+                        <td><strong>${horaFormat}</strong></td>
+                        <td><span class="badge-estado ${badgeClass}">${c.estado.toUpperCase()}</span></td>
+                        <td>
+                            <div class="acciones-cita-row">
+                                <button class="btn-accion-cita btn-confirmar" data-id="${c.id}" title="Confirmar Cita" ${c.estado === 'confirmada' ? 'disabled' : ''}>
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="btn-accion-cita btn-cancelar" data-id="${c.id}" title="Cancelar Cita" ${c.estado === 'cancelada' ? 'disabled' : ''}>
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            tbody.querySelectorAll('.btn-confirmar').forEach(btn => {
+                btn.addEventListener('click', () => cambiarEstadoCita(btn.dataset.id, 'confirmada', cargarCitas));
+            });
+
+            tbody.querySelectorAll('.btn-cancelar').forEach(btn => {
+                btn.addEventListener('click', () => cambiarEstadoCita(btn.dataset.id, 'cancelada', cargarCitas));
+            });
+
+        } catch (err) {
+            console.error("Error al consultar citas:", err);
+            tbody.innerHTML = '<tr><td colspan="8" class="error-td">Error al conectar con la base de datos</td></tr>';
+        }
+    };
+
+    container.querySelector('#btn-aplicar-filtros-citas').addEventListener('click', cargarCitas);
+    container.querySelector('#btn-refrescar-citas').addEventListener('click', cargarCitas);
+
+    cargarCitas();
+}
+
+async function cambiarEstadoCita(idCita, nuevoEstado, callbackRecarga) {
+    if (!estaSupabaseListo()) return;
+
+    try {
+        const { error } = await supabase
+            .from('citas')
+            .update({ estado: nuevoEstado })
+            .eq('id', idCita);
+
+        if (error) {
+            mostrarNotificacion(`Error al actualizar estado: ${error.message}`, 'error');
+        } else {
+            mostrarNotificacion(`Cita ${nuevoEstado === 'confirmada' ? 'confirmada' : 'cancelada'}`, 'success');
+            if (callbackRecarga) callbackRecarga();
+            if (window.generarPildorasDeTiempo) window.generarPildorasDeTiempo();
+        }
+    } catch (err) {
+        console.error("Error al cambiar estado de cita:", err);
+        mostrarNotificacion('Error al conectar con Supabase', 'error');
     }
 }

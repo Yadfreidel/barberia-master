@@ -1,6 +1,7 @@
 import { obtenerServicios } from '../models/serviceModel.js';
+import { supabase, estaSupabaseListo } from '../assets/supabaseClient.js';
 
-export function procesarCita(evento) {
+export async function procesarCita(evento) {
     evento.preventDefault();
 
     const TU_TELEFONO = "8292466177";
@@ -17,6 +18,95 @@ export function procesarCita(evento) {
     if (!barbero) { mostrarAlerta("Por favor, selecciona tu barbero en la sección de arriba."); return; }
     if (!fecha) { mostrarAlerta("Por favor, selecciona una fecha para tu cita."); return; }
     if (!hora) { mostrarAlerta("Por favor, toca una de las horas disponibles."); return; }
+
+    // Persistencia en Supabase
+    if (estaSupabaseListo()) {
+        try {
+            // Buscar ID de barbero
+            let barberoId = null;
+            const { data: barberosData } = await supabase
+                .from('barberos')
+                .select('id')
+                .eq('nombre', barbero)
+                .limit(1);
+
+            if (barberosData && barberosData.length > 0) {
+                barberoId = barberosData[0].id;
+            } else {
+                // Auto-crear si no existe en la BD
+                const { data: nuevoBarbero } = await supabase
+                    .from('barberos')
+                    .insert([{ nombre: barbero, activo: true }])
+                    .select('id')
+                    .single();
+                if (nuevoBarbero) barberoId = nuevoBarbero.id;
+            }
+
+            // Buscar ID de servicio
+            let servicioId = null;
+            const { data: serviciosData } = await supabase
+                .from('servicios')
+                .select('id')
+                .eq('nombre', servicio)
+                .limit(1);
+
+            if (serviciosData && serviciosData.length > 0) {
+                servicioId = serviciosData[0].id;
+            } else {
+                // Auto-crear si no existe en la BD
+                const serviciosActuales = obtenerServicios();
+                const sObj = serviciosActuales.find(s => s.nombre === servicio);
+                const precioNum = sObj ? parseFloat(String(sObj.precio).replace(/[^0-9.]/g, '')) || 0 : 0;
+                
+                const { data: nuevoServicio } = await supabase
+                    .from('servicios')
+                    .insert([{ nombre: servicio, precio: precioNum, duracion_minutos: 30 }])
+                    .select('id')
+                    .single();
+                if (nuevoServicio) servicioId = nuevoServicio.id;
+            }
+
+            if (barberoId && servicioId) {
+                const { error: insertError } = await supabase
+                    .from('citas')
+                    .insert([{
+                        nombre_cliente: nombre,
+                        telefono_cliente: telefonoCliente,
+                        email: email,
+                        barbero_id: barberoId,
+                        servicio_id: servicioId,
+                        fecha: fecha,
+                        hora: hora,
+                        estado: 'pendiente'
+                    }]);
+
+                if (insertError) {
+                    const esConflictoUnique = 
+                        insertError.code === '23505' || 
+                        (insertError.message && (
+                            insertError.message.toLowerCase().includes('unique') || 
+                            insertError.message.toLowerCase().includes('duplicate') ||
+                            insertError.message.toLowerCase().includes('citas_barbero_id_fecha_hora')
+                        ));
+
+                    if (esConflictoUnique) {
+                        mostrarAlerta("Ese horario ya no está disponible, por favor elige otro.");
+                        if (window.generarPildorasDeTiempo) {
+                            window.generarPildorasDeTiempo();
+                        }
+                        return; // Detiene el flujo sin abrir WhatsApp ni mostrar tracking
+                    } else {
+                        mostrarAlerta("No se pudo registrar la reserva: " + (insertError.message || "Error en la base de datos"));
+                        return;
+                    }
+                }
+            }
+        } catch (err) {
+            console.error("Error al procesar reserva en Supabase:", err);
+            mostrarAlerta("Ocurrió un error inesperado al conectar con la base de datos.");
+            return;
+        }
+    }
 
     const fechaFormateada = fecha.split('-').reverse().join('/');
 

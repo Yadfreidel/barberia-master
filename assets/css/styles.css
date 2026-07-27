@@ -1026,10 +1026,13 @@ section {
 }
 
 .pildora-hora.deshabilitada {
-    background-color: rgba(17, 17, 17, 0.5);
-    color: #2a2a2a;
+    background-color: rgba(20, 20, 20, 0.7);
+    color: #666666;
     cursor: not-allowed;
-    opacity: 0.3;
+    opacity: 0.45;
+    text-decoration: line-through;
+    pointer-events: none;
+    border-color: rgba(255, 255, 255, 0.05);
 }
 
 /* Submit Button */
@@ -2272,4 +2275,208 @@ section {
     .grid-horas {
         grid-template-columns: repeat(3, 1fr);
     }
+}
+
+/* ==========================================
+   ESTILOS PANEL DE HISTORIAL DE CITAS (ADMIN)
+   ========================================== */
+.admin-filtros-citas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+    background: rgba(15, 15, 15, 0.7);
+    padding: 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gris-borde);
+    margin-bottom: 20px;
+}
+
+.filtro-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 140px;
+}
+
+.filtro-item label {
+    font-size: 0.75rem;
+    color: var(--dorado);
+    font-weight: 600;
+}
+
+.filtro-item select,
+.filtro-item input {
+    padding: 8px 10px;
+    background-color: var(--negro-fondo);
+    border: 1px solid var(--gris-borde);
+    color: var(--blanco);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-family: var(--font-body);
+}
+
+.btn-admin-filtrar {
+    padding: 9px 18px;
+    background: linear-gradient(135deg, var(--dorado), var(--dorado-brillante));
+    color: var(--negro-fondo);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-admin-filtrar:hover {
+    opacity: 0.9;
+}
+
+.tabla-contenedor-responsive {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--gris-borde);
+    border-radius: var(--radius-sm);
+    background: rgba(12, 12, 12, 0.8);
+}
+
+.tabla-admin-citas {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.85rem;
+}
+
+.tabla-admin-citas th {
+    background-color: rgba(255, 255, 255, 0.03);
+    color: var(--dorado);
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--gris-borde);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+.tabla-admin-citas td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    color: #ddd;
+    vertical-align: middle;
+}
+
+.tabla-admin-citas tr:hover td {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.subtext-email {
+    color: #777;
+    font-size: 0.75rem;
+}
+
+.link-tel {
+    color: var(--dorado);
+    text-decoration: none;
+}
+
+.link-tel:hover {
+    text-decoration: underline;
+}
+
+.badge-estado {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.badge-pendiente {
+    background: rgba(241, 196, 15, 0.15);
+    color: #f1c40f;
+    border: 1px solid rgba(241, 196, 15, 0.3);
+}
+
+.badge-confirmada {
+    background: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.3);
+}
+
+.badge-cancelada {
+    background: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+.acciones-cita-row {
+    display: flex;
+    gap: 6px;
+}
+
+.btn-accion-cita {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    transition: var(--transition);
+}
+
+.btn-accion-cita.btn-confirmar {
+    background-color: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.4);
+}
+
+.btn-accion-cita.btn-confirmar:hover:not(:disabled) {
+    background-color: #2ecc71;
+    color: #111;
+}
+
+.btn-accion-cita.btn-cancelar {
+    background-color: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.4);
+}
+
+.btn-accion-cita.btn-cancelar:hover:not(:disabled) {
+    background-color: #e74c3c;
+    color: #fff;
+}
+
+.btn-accion-cita:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+}
+
+.cargando-td, .vacio-td, .error-td {
+    text-align: center;
+    padding: 24px !important;
+    color: #888;
+}
+
+.error-td {
+    color: #e74c3c;
+}
+
+.admin-aviso-config {
+    background: rgba(197, 160, 89, 0.1);
+    border: 1px solid var(--dorado);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    text-align: center;
+    color: var(--dorado-brillante);
+    margin: 20px 0;
+}
+
+.admin-aviso-config i {
+    font-size: 2rem;
+    margin-bottom: 10px;
 }
